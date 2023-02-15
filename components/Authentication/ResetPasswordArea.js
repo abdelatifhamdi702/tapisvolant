@@ -1,19 +1,50 @@
 import React from 'react'
 import Swal from 'sweetalert2'
+import { useRouter } from 'next/router'
+var token = ''
+var email = ''
+
+function CheckPassword(inputtxt) {
+  var decimal =
+    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,50}$/
+  if (inputtxt.match(decimal)) {
+    return true
+  } else {
+    return false
+  }
+}
 const reset = async () => {
-  let email = document.getElementById('email').value
+  let password = document.getElementById('password').value
+  if (!CheckPassword(password)) {
+    let error =
+      'Le mot de passe doit contenir (1 majuscule, 1 symbole, plus de 8 caractères)'
+    Swal.fire({
+      position: 'center',
+      icon: 'error',
+      title: error,
+      showConfirmButton: false,
+      timer: 1500,
+    })
+
+    return {
+      error: error,
+    }
+  }
   let headersList = {
+    authorization: 'Bearer ' + token,
     'Content-Type': 'application/json',
-    //'Cross-Origin-Resource-Policy': 'cross-origin',
+    'Cross-Origin-Resource-Policy': 'cross-origin',
   }
   let bodyContent = JSON.stringify({
+    token: token,
+    password: password,
     email: email,
   })
 
   let response = await fetch(
     `http://${process.env.host}:${process.env.port}/reset/password`,
     {
-      method: 'POST',
+      method: 'PATCH',
       headers: headersList,
       body: bodyContent,
     }
@@ -29,13 +60,16 @@ const submitResetForm = async (e) => {
     Swal.fire({
       position: 'center',
       icon: 'success',
-      title: "L'email a été envoyé avec succès",
+      title: 'Votre mot de passe a été changé avec succès',
       showConfirmButton: false,
       timer: 1500,
     })
   }
 }
-const ForgotPasswordArea = () => {
+const ResetPasswordArea = () => {
+  var router = useRouter()
+  email = router.query['email']
+  token = router.query['token']
   return (
     <>
       <section className="Login-wrap pt-100 pb-100">
@@ -49,19 +83,13 @@ const ForgotPasswordArea = () => {
               <div className="login-body">
                 <form className="form-wrap" onSubmit={submitResetForm}>
                   <div className="row">
-                    <div className="col-md-12">
-                      <p>
-                        Nous vous enverrons un code de vérification par e-mail
-                        pour réinitialiser votre mot de passe.{' '}
-                      </p>
-                    </div>
                     <div className="col-lg-12">
                       <div className="form-group">
                         <input
-                          id="email"
-                          name="email"
-                          type="email"
-                          placeholder="Email"
+                          id="password"
+                          name="password"
+                          type="password"
+                          placeholder="Ecrivez votre nouveau mot de passeord"
                           required
                         />
                       </div>
@@ -82,4 +110,4 @@ const ForgotPasswordArea = () => {
   )
 }
 
-export default ForgotPasswordArea
+export default ResetPasswordArea

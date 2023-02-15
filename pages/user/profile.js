@@ -65,7 +65,9 @@ const profile = () => {
           document.getElementById('handicaps').innerHTML = 'aucun'
         } else {
           for (var h in res.data.DisabilityCategories) {
-            handicaps += res.data.DisabilityCategories[h].type + '<br />'
+            if (res.data.DisabilityCategories[h].type != 'aucun') {
+              handicaps += res.data.DisabilityCategories[h].type + '<br />'
+            }
           }
           document.getElementById('handicaps').innerHTML = handicaps
         }

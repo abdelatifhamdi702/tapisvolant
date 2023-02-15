@@ -1,77 +1,18 @@
 import React, { useState } from 'react'
 import Activity from '../common/Activity'
 import Comment from '../common/Comment'
-import Rating from '../common/Rating'
+import Swal from 'sweetalert2'
 import RatingInput from '../common/RatingInput'
-const dummyActivitiesData = [
-  {
-    title: 'LE CENTRE HISTORIQUE',
-    imgURL: '/images/tour/single-tour-1.jpg',
-    description: `Au centre de cette place se trouve le marché des Grands
-   Hommes, un marché couvert dans un écrin de verre de structure
-   métallique. Il abrite une galerie commerciale. Six rues
-   rayonnent au centre de la place des Grands-Hommes qui sont
-   dédiées aux grands philosophes (Buffon, Diderot, Montaigne,
-   Montesquieu, Rousseau et Voltaire).`,
-  },
-  {
-    title: 'PALAIS-GALLIEN',
-    imgURL: '/images/tour/single-tour-12.jpg',
-    description: `L'amphithéâtre romain, connu sous le nom de palais Gallien,
-    est le seul monument de l’antique Burdigala encore visible. Il
-    fut élevé au début du IIIe siècle peut-être sous le règne de
-    l'empereur romain Gallien, d’où son nom. Il était à l’origine
-    de forme elliptique, mesurait plus de 130 mètres dans son plus
-    grand axe et pouvait accueillir sur ses gradins en bois plus
-    de 20 000 spectateurs. Encore bien conservé au XVIIe siècle,
-    il commença à être démoli lors de la Révolution après avoir
-    été vendu en lots comme bien national. Aujourd’hui, il ne
-    reste qu'un sixième de ce monument.`,
-  },
-  {
-    title: 'Le miroir de l’eau',
-    imgURL: '/images/tour/single-tour-13.jpg',
-    description: `Cette œuvre originale, du paysagiste Michel Corajoud, alterne
-    des effets extraordinaires de miroir et de brouillard. Situé
-    face à la Place de la Bourse, il est le lieu le plus
-    photographié de Bordeaux.`,
-  },
-  {
-    title: 'LE JARDIN BOTANIQUE DE LA BASTILLE',
-    imgURL: '/images/tour/single-tour-14.jpg',
-    description: `Découvrir le Jardin botanique conçu par Françoise Jourda,
-    architecte, et Catherine Mosbach, paysagiste en 2003. Les
-    grilles d'entrée sont de Pascal Convert. Les plantes sont
-    organisées en systèmes cohérents, poussent dans des conditions
-    proches de celles de leur milieu nature.`,
-  },
-]
 
-const dummyCommentsData = [
-  {
-    userName: 'Anthony J. Ruiz',
-    userImgURL: '/images/blog/avatar-1.jpg',
-    commentContent: `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-    diam nonumy eirmod tempor invidunt ut labore et dolore magna
-    aliquyam erat, sed diam voluptua. At vero eos et accusam et
-    justo duo dolores et ea rebum.`,
-    rating: '4',
-  },
-  {
-    userName: 'Andrea F. Kelley',
-    userImgURL: '/images/blog/avatar-2.jpg',
-    commentContent: `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed
-    diam nonumy eirmod tempor invidunt ut labore et dolore magna
-    aliquyam erat, sed diam voluptua. At vero eos et accusam et
-    justo duo dolores et ea rebum.`,
-    rating: '4',
-  },
-]
-
-const TourDetailsContent = ({ data }) => {
+const TourDetailsContent = ({ activities, tour, comments }) => {
   const [clicked, setClicked] = useState(false)
   const [toggleState, setToggleState] = useState(1)
+  const [rating, setRating] = useState(0)
 
+  const getRatingData = (value) => {
+    let converted = parseInt(value)
+    setRating(converted)
+  }
   const toggle = (index) => {
     if (clicked === index) {
       return setClicked(null)
@@ -83,34 +24,153 @@ const TourDetailsContent = ({ data }) => {
     setToggleState(index)
   }
 
+  const createComment = async () => {
+    if (!localStorage.getItem('token')) {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: "Vous devez d'abord connecter a votre compte",
+        showConfirmButton: false,
+        timer: 1500,
+      })
+    }
+    let headersList = {
+      authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+      'Cross-Origin-Resource-Policy': 'cross-origin',
+    }
+    let bodyContent = JSON.stringify({
+      tourId: tour.id,
+      rating: rating,
+      content: document.getElementById('review-msg').value,
+    })
+    let totalReview = parseInt(tour.totalReview) + 1
+    let newRating =
+      parseFloat(tour.rating) +
+      (rating - parseFloat(tour.rating)) * (1 / totalReview)
+    let bodyContentTour = JSON.stringify({
+      id: tour.id,
+      rating: newRating,
+      totalReview: totalReview,
+    })
+    let response2 = await fetch(
+      `http://${process.env.host}:${process.env.port}/tour`,
+      {
+        method: 'PATCH',
+        body: bodyContentTour,
+        headers: headersList,
+      }
+    )
+
+    const res2 = await response2.json()
+    console.log(res2)
+    let response = await fetch(
+      `http://${process.env.host}:${process.env.port}/comment`,
+      {
+        method: 'POST',
+        headers: headersList,
+        body: bodyContent,
+      }
+    )
+    return await response.json()
+  }
+
+  const submitCommentForm = async (e) => {
+    e.preventDefault()
+    const res = await createComment()
+    console.log(res)
+    if (res.data) {
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Votre commentaire est envoyé avec succès',
+        showConfirmButton: false,
+        timer: 1500,
+      })
+    }
+  }
+
+  const uploadBooking = async () => {
+    let headersList = {
+      authorization: 'Bearer ' + localStorage.getItem('token'),
+    }
+    let formData = new FormData()
+
+    formData.append('imgUrl', document.getElementById('receiptImg').files[0])
+    formData.append('tourId', tour.id)
+
+    let response = await fetch(
+      `http://${process.env.host}:${process.env.port}/upload/booking`,
+      {
+        method: 'POST',
+        headers: headersList,
+        body: formData,
+      }
+    )
+
+    return await response.json()
+  }
+
+  const submitBookingForm = async (e) => {
+    e.preventDefault()
+    const res = await createBooking()
+    console.log(res)
+    const res2 = await uploadBooking()
+    console.log(res2)
+    if (res.data && res2.data) {
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: 'Votre réservation a été effectuée avec succès',
+        showConfirmButton: false,
+        timer: 1500,
+      })
+    }
+  }
+
+  const createBooking = async () => {
+    if (!localStorage.getItem('token')) {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: "Vous devez d'abord connecter a votre compte",
+        showConfirmButton: false,
+        timer: 1500,
+      })
+    }
+    let headersList = {
+      authorization: 'Bearer ' + localStorage.getItem('token'),
+      'Content-Type': 'application/json',
+      'Cross-Origin-Resource-Policy': 'cross-origin',
+    }
+    let bodyContent = JSON.stringify({
+      tourId: tour.id,
+    })
+    let response = await fetch(
+      `http://${process.env.host}:${process.env.port}/booking`,
+      {
+        method: 'POST',
+        headers: headersList,
+        body: bodyContent,
+      }
+    )
+    return await response.json()
+  }
+
+  const pay = () => {
+    localStorage.setItem('amount', tour.price)
+    document.location.href = '/payment'
+  }
   return (
     <>
       <div className="container pt-100">
         <div className="row gx-5">
           <div className="col-xl-9 col-lg-8 col-md-12 col-12">
             <div className="tour-details-info">
-              <p>
-                En 2007 à Christchurch en Nouvelle-Zélande, l'Organisation des
-                Nations unies pour l'éducation, la science et la culture
-                (Unesco) a inscrit Bordeaux, Port de la lune, sur la liste du
-                patrimoine mondial au titre d'ensemble urbain exceptionnel.
-                L’inscription de cette ville est une distinction internationale
-                honorable qui la démarque. A ce titre, Bordeaux se doit de
-                poursuivre ses efforts d’accueil et enrichir une offre
-                touristique de qualité pour tous les publics. Déjà en 2006,
-                Bordeaux a été la première ville de France à obtenir en 2006 le
-                label « Famille plus - destination pour petits et grands » qui
-                consacre une offre d’accueil adaptée au public familial. A
-                présent, elle devient ville pilote sur le plan national pour la
-                mise en place de circuits de découverte adaptés aux clientèles à
-                besoins spécifiques en milieu urbain avec trois itinéraires qui
-                ont obtenu en septembre 2007 le label{' '}
-                <b style={{ color: '#cc3f32' }}>« Tourisme et Handicaps »</b>
-                pour les handicaps moteur et auditif
-              </p>
-              {dummyActivitiesData.map((item, index) => (
+              <p>{tour.introduction}</p>
+              {activities.map((item, index) => (
                 <Activity
-                  key={index}
+                  key={item.id}
                   title={item.title}
                   imgURL={item.imgURL}
                   description={item.description}
@@ -118,13 +178,13 @@ const TourDetailsContent = ({ data }) => {
               ))}
             </div>
             <div className="post-comment-wrap">
-              <h4 className="comment-title">2 Commentaires</h4>
-              {dummyCommentsData.map((item, index) => (
+              <h4 className="comment-title">{comments.length} Commentaires</h4>
+              {comments.map((item, index) => (
                 <Comment
                   key={index}
-                  userName={item.userName}
-                  commentContent={item.commentContent}
-                  userImgURL={item.userImgURL}
+                  userName={item.username}
+                  commentContent={item.content}
+                  userImgURL={item.profileImg}
                   rating={item.rating}
                 />
               ))}
@@ -133,17 +193,9 @@ const TourDetailsContent = ({ data }) => {
               <div className="comment-form-title">
                 <h4>Écrivez votre commentaire</h4>
               </div>
-              <form action="#" className="comment-form">
+              <form onSubmit={submitCommentForm} className="comment-form">
                 <div className="row gx-3">
-                  <div className="col-lg-6">
-                    <div className="form-group s1">
-                      <input type="text" placeholder="Nom et prénom" />
-                    </div>
-                    <div className="form-group s2">
-                      <input type="email" placeholder="Email" />
-                    </div>
-                  </div>
-                  <div className="col-lg-6">
+                  <div className="col-lg-12">
                     <div className="form-group v1">
                       <textarea
                         name="review-msg"
@@ -159,14 +211,8 @@ const TourDetailsContent = ({ data }) => {
                       className="rating-star"
                       style={{ marginBottom: '10px' }}
                     >
-                      <RatingInput />
+                      <RatingInput getRating={getRatingData} />
                     </ul>
-                    <div className="checkbox">
-                      <input type="checkbox" id="ts" />
-                      <label htmlFor="ts">
-                        J'accepte vos termes et conditions.
-                      </label>
-                    </div>
 
                     <button type="submit" className="btn v7">
                       Envoyer <i className="ri-logout-circle-r-line"></i>{' '}
@@ -179,8 +225,27 @@ const TourDetailsContent = ({ data }) => {
           <div className="col-xl-3 col-lg-4 col-md-12 col-12">
             <div className="sidebar">
               <div className="sidebar-widget tour-book">
-                {/*<h4>Reserver maintenant </h4>
-                <div className="input-group">
+                <h4>Pour Reserver</h4>
+                <p>Upload le reçu de paiement</p>
+                <input
+                  className="form-control"
+                  id="receiptImg"
+                  name="receiptImg"
+                  type="file"
+                />
+                <button
+                  type="button"
+                  className="book-btn"
+                  onClick={submitBookingForm}
+                >
+                  Reserver maintenant{' '}
+                  <i className="ri-logout-circle-r-line"></i>{' '}
+                </button>
+                <br />
+                <h4>Ou</h4>
+                <p>Payez le montant en cliquant sur le bouton ci-dessous</p>
+
+                {/*<div className="input-group">
                   <input
                     className="form-control"
                     type="date"
@@ -207,9 +272,8 @@ const TourDetailsContent = ({ data }) => {
                 <div className="form-group">
                   <input type="text" placeholder="Destination" />
                 </div>*/}
-                <button type="button" className="book-btn">
-                  Reserver maintenant{' '}
-                  <i className="ri-logout-circle-r-line"></i>{' '}
+                <button type="button" className="book-btn" onClick={pay}>
+                  payer <i className="ri-logout-circle-r-line"></i>{' '}
                 </button>
               </div>
               {/*<div className="sidebar-widget tour-map">

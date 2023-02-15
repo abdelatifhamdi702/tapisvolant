@@ -94,10 +94,6 @@ const editProfile = async () => {
   let gender = e.value
   let dob = document.getElementById('dob').value
   let age = _calculateAge(new Date(dob))
-  console.log(document.getElementById('address_1_id').getAttribute('data-id'))
-  console.log(document.getElementById('address_2_id').getAttribute('data-id'))
-  console.log(document.getElementById('dis_id').getAttribute('data-id'))
-  console.log(document.getElementById('profile_id').getAttribute('data-id'))
   let address = [
     {
       id: document.getElementById('address_1_id').getAttribute('data-id'),
@@ -240,6 +236,72 @@ const submitEditAuthForm = async (e) => {
   }
 }
 
+var token = localStorage.getItem('token')
+var email = localStorage.getItem('email')
+
+function CheckPassword(inputtxt) {
+  var decimal =
+    /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,50}$/
+  if (inputtxt.match(decimal)) {
+    return true
+  } else {
+    return false
+  }
+}
+const reset = async () => {
+  let password = document.getElementById('password').value
+  if (!CheckPassword(password)) {
+    let error =
+      'Le mot de passe doit contenir (1 majuscule, 1 symbole, plus de 8 caractères)'
+    Swal.fire({
+      position: 'center',
+      icon: 'error',
+      title: error,
+      showConfirmButton: false,
+      timer: 1500,
+    })
+
+    return {
+      error: error,
+    }
+  }
+  let refreshToken = localStorage.getItem('refreshToken')
+  let headersList = {
+    authorization: 'Bearer ' + refreshToken,
+    'Content-Type': 'application/json',
+    'Cross-Origin-Resource-Policy': 'cross-origin',
+  }
+  let bodyContent = JSON.stringify({
+    token: refreshToken,
+    password: password,
+    email: email,
+  })
+  let response = await fetch(
+    `http://${process.env.host}:${process.env.port}/reset/password`,
+    {
+      method: 'PATCH',
+      headers: headersList,
+      body: bodyContent,
+    }
+  )
+
+  return await response.json()
+}
+const submitResetForm = async (e) => {
+  e.preventDefault()
+  const res = await reset()
+  console.log(res)
+  if (res.data) {
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'Votre mot de passe a été changé avec succès',
+      showConfirmButton: false,
+      timer: 1500,
+    })
+  }
+}
+
 const EditProfile = () => {
   useLayoutEffect(() => {
     async function fetchAuthData() {
@@ -275,11 +337,15 @@ const EditProfile = () => {
             .getElementById('address_2_id')
             .setAttribute('data-id', res.data.Addresses[1].id)
         }
+
         for (var h in res.data.DisabilityCategories) {
-          console.log(res.data.DisabilityCategories[h].id)
-          document.getElementById(
-            res.data.DisabilityCategories[h].code
-          ).checked = true
+          let i = parseInt(h) + 1
+          let code = 'code' + i
+          if (res.data.DisabilityCategories[h].code != code) {
+            document.getElementById(
+              res.data.DisabilityCategories[h].code
+            ).checked = true
+          }
           document
             .getElementById('dis_id' + h)
             .setAttribute('data-id', res.data.DisabilityCategories[h].id)
@@ -564,12 +630,7 @@ const EditProfile = () => {
               <div className="tab-content">
                 <div>
                   <h2 className="account-title">Changer le mot de passe</h2>
-                  <form
-                    className="form-wrap"
-                    action="php/form-process.php"
-                    method="post"
-                    id="change_pwd"
-                  >
+                  <form className="form-wrap" onSubmit={submitResetForm}>
                     <div
                       id="message"
                       className="alert alert-danger alert-dismissible fade"
@@ -578,19 +639,8 @@ const EditProfile = () => {
                       <div className="col-lg-6">
                         <div className="form-group">
                           <input
-                            id="oldpwd"
-                            name="oldpwd"
-                            type="phone"
-                            placeholder="L'ancien mot de passe"
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="col-lg-6">
-                        <div className="form-group">
-                          <input
-                            id="newpwd"
-                            name="newpwd"
+                            id="password"
+                            name="password"
                             type="password"
                             placeholder="le nouveau mot de passe"
                             required
@@ -598,7 +648,7 @@ const EditProfile = () => {
                         </div>
                       </div>
 
-                      <div className="col-lg-12 text-center">
+                      <div className="col-lg-6 text-center">
                         <button type="submit" className="btn v5">
                           Changer
                         </button>

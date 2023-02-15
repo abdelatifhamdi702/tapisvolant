@@ -118,7 +118,9 @@ const submitRegisterForm = async (e) => {
   console.log(res)
   if (res.data) {
     localStorage.setItem('token', res.data.tokens.accessToken)
+    localStorage.setItem('refreshToken', res.data.tokens.refreshToken)
     localStorage.setItem('status', true)
+    localStorage.setItem('email', document.getElementById('email').value)
     const res2 = await createEmptyProfile()
     console.log(res2)
     document.location.href = '/'

@@ -1,88 +1,116 @@
-import React from 'react'
 import Link from 'next/link'
 import Tour from '../Tour/tour'
-const dummyToursData = [
-  {
-    title: 'Bordeaux vacances adaptees',
-    duration: '10',
-    rating: '4.5',
-    totalReview: '80',
-    description:
-      'Prochains séjours pour le mois d’avril soyez au rendez vous (30 vacanciers)',
-    imgURL: '/images/tour/feature-tour-1.jpg',
-    price: '1,412',
-  },
-  {
-    title: 'Séjours à la venise des alpes',
-    duration: '10',
-    rating: '4.5',
-    totalReview: '80',
-    description:
-      'Prochaine sejours adaptes pour annecy Mois d’avril (30 vacanciers)',
-    imgURL: '/images/tour/feature-tour-3.jpg',
-    price: '1,412',
-  },
-  {
-    title: 'La vallee de chamonix mont-blanc',
-    duration: '10',
-    rating: '4.5',
-    totalReview: '80',
-    description:
-      'Tourisme adapte prochaine depart avril-mai 2023 (30 vacanciers)',
-    imgURL: '/images/tour/feature-tour-4.jpg',
-    price: '1,412',
-  },
-  {
-    title: 'Séjours de rêve à Marrakech',
-    duration: '8',
-    rating: '4.5',
-    totalReview: '80',
-    description:
-      'Séjours de rêve à Marrakech du 01 au 08 mai 2023 PENSION COMPLETE',
-    imgURL: '/images/tour/feature-tour-2.png',
-    price: '1,412',
-  },
-]
+import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+
 const FeatureTour = ({ viewButton }) => {
+  const [tours, setTours] = useState([])
+  var router = useRouter()
+  var destination = router.query.destination
+  var disability = router.query.disability
+  var keyword = router.query.keyword
+  let url = ''
+  useEffect(() => {
+    const fetchTours = async (url) => {
+      if (router && router.query && router.query.search) {
+        url = `http://${process.env.host}:${process.env.port}/tour/search/?destinationId=${destination}&disability=${disability}&title=${keyword}`
+        const response = await fetch(url)
+
+        /*if (!response.ok) {
+        throw new Error('Something went wrong!')
+      }*/
+
+        const responseData = await response.json()
+        console.log(responseData)
+        const loadedTours = []
+
+        for (const key in responseData.data) {
+          console.log(key)
+          let path = responseData.data[key].imgUrl
+          let correctPath = path.replace(/\\/g, '/')
+          loadedTours.push({
+            id: responseData.data[key].id,
+            title: responseData.data[key].title,
+            duration: responseData.data[key].duration,
+            rating: responseData.data[key].rating,
+            totalReview: responseData.data[key].totalReview,
+            description: responseData.data[key].description,
+            price: responseData.data[key].price,
+            imgURL: '' + correctPath,
+          })
+        }
+        console.log(loadedTours)
+
+        setTours(loadedTours)
+      } else {
+        url = `http://${process.env.host}:${process.env.port}/tour/all/`
+        const response = await fetch(url)
+
+        /*if (!response.ok) {
+        throw new Error('Something went wrong!')
+      }*/
+
+        const responseData = await response.json()
+        console.log(responseData)
+        const loadedTours = []
+
+        for (const key in responseData.data) {
+          console.log(key)
+          let path = responseData.data[key].imgUrl
+          let correctPath = path.replace(/\\/g, '/')
+          loadedTours.push({
+            id: responseData.data[key].id,
+            title: responseData.data[key].title,
+            duration: responseData.data[key].duration,
+            rating: responseData.data[key].rating,
+            totalReview: responseData.data[key].totalReview,
+            description: responseData.data[key].description,
+            price: responseData.data[key].price,
+            imgURL: '' + correctPath,
+          })
+        }
+        console.log(loadedTours)
+
+        setTours(loadedTours)
+      }
+    }
+
+    fetchTours(url)
+  }, [router])
+
   return (
     <>
       <section className="feature-wrap">
         <div className="container">
-          <div className="row mb-40 align-items-end">
-            <div className="col-md-12">
-              <div className="section-title style4 text-center">
-                <span>TOUS NOS</span>
-                <h2>SEJOURS DISPONIBLES</h2>
-              </div>
-            </div>
-          </div>
           <div className="row">
-            {dummyToursData.map((item, index) => (
+            {tours.map((item, index) => (
               <Tour
-                key={index}
+                id={item.id}
+                key={item.id}
                 title={item.title}
                 duration={item.duration}
                 rating={item.rating}
                 totalReview={item.totalReview}
                 description={item.description}
-                imgURL={item.imgURL}
+                imgURL={'http://' + item.imgURL.replace(/\\/g, '/')}
                 price={item.price}
               />
             ))}
           </div>
-          <div className="row mt-30">
+          {/*<div className="row mt-30">
             {viewButton ? (
               <div className="col-12 text-center">
                 <Link href="/tours">
                   <a className="btn v2">
-                    View All Tours <i className="ri-logout-circle-r-line"></i>
+                    Afficher tout les séjours{' '}
+                    <i className="ri-logout-circle-r-line"></i>
                   </a>
                 </Link>
               </div>
             ) : (
               ''
             )}
-          </div>
+          </div>*/}
         </div>
       </section>
     </>

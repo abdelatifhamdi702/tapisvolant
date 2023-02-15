@@ -79,8 +79,6 @@ const Navbar = () => {
   }
 
   useEffect(() => {
-    // Perform localStorage action
-    console.log(isLogin)
     setIsLogin(localStorage.getItem('status') === 'true')
   })
 

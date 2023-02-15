@@ -25,7 +25,7 @@
       height: 100%;
       top: 0;
       left: 0;
-      opacity: .4;
+      opacity: 0.4;
     }
 
     .hero-content {
@@ -46,8 +46,12 @@
     background-image: url('/images/banner2.jpg');
 
     &::before {
-      background-image: linear-gradient(to left, rgba(31, 29, 29, 0), rgba(31, 29, 29, 1));
-      content: "";
+      background-image: linear-gradient(
+        to left,
+        rgba(31, 29, 29, 0),
+        rgba(31, 29, 29, 1)
+      );
+      content: '';
       position: absolute;
       top: 0;
       left: 0;
@@ -264,7 +268,7 @@
 
     .filter-box {
       &:nth-child(1) {
-        width: 20%;
+        width: 25%;
       }
 
       &:nth-child(2),
@@ -274,7 +278,7 @@
       }
 
       &:nth-child(5) {
-        width: 20%;
+        width: 25%;
       }
 
       border: none;
@@ -319,7 +323,7 @@
 }
 
 .filter-box {
-  width: 20%;
+  width: 25%;
   border-right: 1px solid var(--clr_grey);
 
   .form-group {
@@ -364,7 +368,7 @@
     color: var(--clr_white);
     text-align: center;
     height: 60px;
-  
+
     i {
       position: relative;
       top: 2px;
@@ -688,11 +692,11 @@
         color: #f4834a;
         font-size: 30px;
         margin-bottom: 20px;
-        transition: .5s;
-        -webkit-transition: .5s;
-        -moz-transition: .5s;
-        -ms-transition: .5s;
-        -o-transition: .5s;
+        transition: 0.5s;
+        -webkit-transition: 0.5s;
+        -moz-transition: 0.5s;
+        -ms-transition: 0.5s;
+        -o-transition: 0.5s;
       }
     }
     &:hover {
@@ -1134,7 +1138,7 @@
     background: #fff;
     padding: 50px 50px 65px;
     border-radius: 10px;
- 
+
     .tour-shape-two {
       top: 60%;
       right: -20px;
@@ -1270,7 +1274,7 @@
   width: auto;
   text-align: left;
   color: #fff;
-  margin:30px 0 0;
+  margin: 30px 0 0;
 
   &:after {
     position: absolute;
@@ -1288,7 +1292,6 @@
     Best Tour CSS
 ------------------------------*/
 
- 
 .best-tour-item {
   margin: 0 0 30px;
   border: 1px solid #f5f5f5;
@@ -3299,7 +3302,8 @@
   border-color: var(--clr_venus);
   border-width: 1px;
 }
-.filter-item-num, .filter-item-cat {
+.filter-item-num,
+.filter-item-cat {
   .hero-filter-down-arrow {
     top: 12px;
   }
@@ -4682,7 +4686,8 @@ form.checkout textarea {
 .contact-form {
   background-color: #fafafa;
   padding: 50px;
-  input, textarea {
+  input,
+  textarea {
     background-color: #fff;
   }
 }

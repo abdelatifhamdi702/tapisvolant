@@ -1,24 +1,41 @@
 import Link from 'next/link'
 import Destination from '../Destination/Destination'
-const dummyDestinationsData = [
-  {
-    title: 'France',
-    imgURL: '/images/tour/rec_tour_1.jpg',
-  },
-  {
-    title: 'Tunisie',
-    imgURL: '/images/tour/rec_tour_2.jpg',
-  },
-  {
-    title: 'Algérie',
-    imgURL: '/images/tour/rec_tour_3.jpg',
-  },
-  {
-    title: 'Maroc',
-    imgURL: '/images/tour/rec_tour_4.jpg',
-  },
-]
+import React, { useEffect, useState } from 'react'
+
 const RecommendTour = ({ title, subTitle, bgStyle }) => {
+  const [destinations, setDestinations] = useState([])
+
+  useEffect(() => {
+    const fetchDestinations = async () => {
+      const response = await fetch(
+        `http://${process.env.host}:${process.env.port}/destination`
+      )
+
+      /*if (!response.ok) {
+        throw new Error('Something went wrong!')
+      }*/
+
+      const responseData = await response.json()
+      console.log(responseData)
+      const loadedDestinations = []
+
+      for (const key in responseData.data) {
+        console.log(key)
+        let path = responseData.data[key].imgUrl
+        let correctPath = path.replace(/\\/g, '/')
+        loadedDestinations.push({
+          id: responseData.data[key].id,
+          title: responseData.data[key].city,
+          imgURL: '' + correctPath,
+        })
+      }
+      console.log(loadedDestinations)
+
+      setDestinations(loadedDestinations)
+    }
+
+    fetchDestinations()
+  }, [])
   return (
     <>
       <section className={`recommend-tour-area ${bgStyle} ptb-100`}>
@@ -36,11 +53,11 @@ const RecommendTour = ({ title, subTitle, bgStyle }) => {
           <div className="row">
             <div className="col-md-12">
               <div className="rec-wrap">
-                {dummyDestinationsData.map((item, index) => (
+                {destinations.map((item, index) => (
                   <Destination
-                    key={index}
+                    key={item.id}
                     title={item.title}
-                    imgURL={item.imgURL}
+                    imgURL={'http://' + item.imgURL.replace(/\\/g, '/')}
                   />
                 ))}
               </div>

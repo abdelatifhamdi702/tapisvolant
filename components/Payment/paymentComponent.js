@@ -4,7 +4,7 @@ import {
   CardElement,
   Elements,
   useElements,
-  useStripe
+  useStripe,
 } from '@stripe/react-stripe-js'
 
 import { loadStripe } from '@stripe/stripe-js'
@@ -36,33 +36,79 @@ const PaymentComponent = ({ price }) => {
     try {
       const headersList = {
         'Content-Type': 'application/json',
-        Authorization:
-          'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJjbGUxdm4yNG8wMDAwb2hzZG5pcHBydzIwIiwiZW1haWwiOiJhZG1pbi0xQGVrY3NvZnQuY29tIiwicm9sZSI6ImFkbWluIiwiaWF0IjoxNjc2Mzc1NzA3LCJleHAiOjE2NzY5ODA1MDd9.FBIkDSIP5-cIgABC9rS0F2X21kS7Acp0Of5DS0N34w8'
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
       }
 
       const bodyContent = JSON.stringify({
-        price
+        price,
       })
 
-      const res = await fetch(`http://localhost:3000/payment/pay`, {
-        method: 'POST',
-        body: bodyContent,
-        headers: headersList
-      })
+      const res = await fetch(
+        `http://${process.env.host}:${process.env.port}/payment/pay`,
+        {
+          method: 'POST',
+          body: bodyContent,
+          headers: headersList,
+        }
+      )
       const jsonRes = await res.json()
 
       const { client_secret: clientSecret } = jsonRes.data
 
       const { paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
-          card: cardEl
-        }
+          card: cardEl,
+        },
       })
+      const submitBookingForm = async () => {
+        const res = await createBooking()
+        console.log(res)
+        if (res.data) {
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Votre réservation a été effectuée avec succès',
+            showConfirmButton: false,
+            timer: 1500,
+          })
+        }
+      }
 
+      const createBooking = async () => {
+        if (!localStorage.getItem('token')) {
+          Swal.fire({
+            position: 'center',
+            icon: 'error',
+            title: "Vous devez d'abord connecter a votre compte",
+            showConfirmButton: false,
+            timer: 1500,
+          })
+        }
+        let headersList = {
+          authorization: 'Bearer ' + localStorage.getItem('token'),
+          'Content-Type': 'application/json',
+          'Cross-Origin-Resource-Policy': 'cross-origin',
+        }
+        let bodyContent = JSON.stringify({
+          tourId: tour.id,
+        })
+        let response = await fetch(
+          `http://${process.env.host}:${process.env.port}/booking`,
+          {
+            method: 'POST',
+            headers: headersList,
+            body: bodyContent,
+          }
+        )
+        return await response.json()
+      }
       if (!paymentIntent) {
         setPaymentStatus('Payment failed!')
       } else {
         setPaymentStatus(paymentIntent.status)
+        if (paymentIntent.status) {
+          submitBookingForm()
+        }
       }
     } catch (error) {
       console.error(error)
@@ -79,28 +125,31 @@ const PaymentComponent = ({ price }) => {
       fontSmoothing: 'antialiased',
       fontSize: '16px',
       '::placeholder': {
-        color: '#32325d'
-      }
+        color: '#32325d',
+      },
     },
     invalid: {
       fontFamily: 'Arial, sans-serif',
       color: '#fa755a',
-      iconColor: '#fa755a'
-    }
+      iconColor: '#fa755a',
+    },
   }
 
   return (
     <>
       <form className="payment-form" onSubmit={handleSubmit} id="payment-form">
+        <h5>Remplissez les informations de votre carte et payez maintenant</h5>
+        <br />
         <CardElement options={{ style: STYLE }}></CardElement>
         {isProcessing && <div class="spinner" id="spinner"></div>}
+        <br />
         {!isProcessing && (
           <button className="payment-btn" id="submit">
-            Pay now
+            Payez maintenant
             <i
               style={{
                 marginTop: '5px',
-                marginLeft: '5px'
+                marginLeft: '5px',
               }}
               className="ri-logout-circle-r-line"
             ></i>
@@ -120,11 +169,9 @@ const PaymentComponent = ({ price }) => {
   )
 }
 
-const PaymentGateway = ({ amount }) => {
-  // const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_API_KEY)
-  const stripePromise = loadStripe(
-    'pk_test_51MYrG3IiBauyueh2CTnhDg1my0ZpNCxqv41OHp5SHglle3ez8G495KZuXbBt6pbwXzQkaiYV0Kn5ozuMDioktomk00VD8PTa5m'
-  )
+const PaymentGateway = () => {
+  const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_API_KEY)
+  const amount = parseFloat(localStorage.getItem('amount'))
   return (
     <Elements stripe={stripePromise}>
       <PaymentComponent price={amount} />

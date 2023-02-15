@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'next/link'
 
 const Tour = ({
+  id,
   title,
   duration,
   rating,
@@ -10,6 +11,7 @@ const Tour = ({
   price,
   imgURL,
 }) => {
+  let detailHref = '/tour-details/' + id
   return (
     <>
       <div className="col-xl-6 col-lg-12">
@@ -44,15 +46,9 @@ const Tour = ({
                 <p>{description}</p>
                 <span className="feature-tour-price">À partir de €{price}</span>
                 <div className="feature-tour-option">
-                  <Link href="/tour-details">
+                  <Link href={detailHref}>
                     <a className="link style1">
-                      Reserver <i className="ri-logout-circle-r-line"></i>
-                    </a>
-                  </Link>
-
-                  <Link href="/tour-details">
-                    <a className="link style2">
-                      Détails de séjour
+                      Détails de séjour{' '}
                       <i className="ri-logout-circle-r-line"></i>
                     </a>
                   </Link>

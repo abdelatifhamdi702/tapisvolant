@@ -8,9 +8,6 @@ import Service from '../components/common/Service'
 import RecommendTour from '../components/common/RecommendTour'
 import FeatureTour from '../components/common/FeatureTour'
 import About from '../components/common/About'
-import Product from '../components/common/Product'
-import Blog from '../components/common/Blog'
-import Newsletter from '../components/common/Newsletter'
 
 const Index2 = () => {
   return (
@@ -38,6 +35,14 @@ const Index2 = () => {
       />
 
       <div className="ptb-100">
+        <div className="row mb-40 align-items-end">
+          <div className="col-md-12">
+            <div className="section-title style4 text-center">
+              <span>TOUS NOS</span>
+              <h2>SEJOURS DISPONIBLES</h2>
+            </div>
+          </div>
+        </div>
         <FeatureTour viewButton={true} />
       </div>
 
