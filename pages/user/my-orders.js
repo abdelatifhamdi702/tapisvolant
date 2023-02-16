@@ -43,9 +43,11 @@ const MyOrders = () => {
         date = date.substring(0, 10)
         let path = responseData.data[key].Tour.imgUrl
         let correctPath = path.replace(/\\/g, '/')
+        console.log(responseData.data[key].status)
         loadedBookings.push({
           title: responseData.data[key].Tour.title,
           price: responseData.data[key].Tour.price,
+          status: responseData.data[key].status,
           imgURL: correctPath,
           date: date,
         })
@@ -74,6 +76,7 @@ const MyOrders = () => {
                           <th scope="col">Séjour</th>
                           <th scope="col">Date</th>
                           <th scope="col">Prix</th>
+                          <th scope="col">Status</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -86,6 +89,7 @@ const MyOrders = () => {
                             }
                             tourPrice={item.price}
                             BookingDate={item.date}
+                            status={item.status}
                           />
                         ))}
                       </tbody>

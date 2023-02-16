@@ -1,6 +1,12 @@
 import React from 'react'
 import Link from 'next/link'
-const BookingRow = ({ tourName, tourImgURL, BookingDate, tourPrice }) => {
+const BookingRow = ({
+  tourName,
+  tourImgURL,
+  BookingDate,
+  tourPrice,
+  status,
+}) => {
   return (
     <>
       <tr>
@@ -15,6 +21,9 @@ const BookingRow = ({ tourName, tourImgURL, BookingDate, tourPrice }) => {
         </td>
         <td>
           <p className="wh-tem-price text-red">${tourPrice}</p>
+        </td>
+        <td>
+          <p className="wh-tem-price">{status}</p>
         </td>
       </tr>
     </>

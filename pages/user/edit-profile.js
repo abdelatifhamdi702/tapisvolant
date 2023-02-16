@@ -1,5 +1,6 @@
-import React, { useLayoutEffect } from 'react'
+import React, { useLayoutEffect, useState } from 'react'
 import MyAccountNavbar from '../../components/MyAccount.js/MyAccountNavbar'
+import SelectDisability from '../../components/common/SelectDisability'
 import Swal from 'sweetalert2'
 async function getAccessToken() {
   let headersList = {
@@ -10,7 +11,6 @@ async function getAccessToken() {
     headers: headersList,
   })
   let response6 = await res6.json()
-
   return response6.data.accessToken
 }
 const authData = async () => {
@@ -120,47 +120,14 @@ const editProfile = async () => {
     },
   ]
   let DisabilityCategory = []
-  if (document.getElementById('Handicapmoteur').checked) {
-    DisabilityCategory.push({
-      id: document.getElementById('dis_id0').getAttribute('data-id'),
-      code: 'Handicapmoteur',
-      type: 'Handicap moteur',
-    })
-  }
-  if (document.getElementById('Handicapsensoriel').checked) {
-    DisabilityCategory.push({
-      id: document.getElementById('dis_id1').getAttribute('data-id'),
-      code: 'Handicapsensoriel',
-      type: 'Handicap sensoriel',
-    })
-  }
-  if (document.getElementById('Handicapvisuel').checked) {
-    DisabilityCategory.push({
-      id: document.getElementById('dis_id2').getAttribute('data-id'),
-      code: 'Handicapvisuel',
-      type: 'Handicap visuel',
-    })
-  }
-  if (document.getElementById('Handicapmental').checked) {
-    DisabilityCategory.push({
-      id: document.getElementById('dis_id3').getAttribute('data-id'),
-      code: 'Handicapmental',
-      type: 'Handicap mental',
-    })
-  }
-  if (document.getElementById('Handicapcognitif').checked) {
-    DisabilityCategory.push({
-      id: document.getElementById('dis_id4').getAttribute('data-id'),
-      code: 'Handicapcognitif',
-      type: 'Handicap cognitif',
-    })
-  }
-  if (document.getElementById('Handicappsychique').checked) {
-    DisabilityCategory.push({
-      id: document.getElementById('dis_id5').getAttribute('data-id'),
-      code: 'Handicappsychique',
-      type: 'Handicap psychique',
-    })
+  var ele = document.getElementsByTagName('input')
+  for (var i = 0; i < ele.length; i++) {
+    if (ele[i].type == 'checkbox' && ele[i].checked == true) {
+      DisabilityCategory.push({
+        code: ele[i].value,
+        type: ele[i].value,
+      })
+    }
   }
   let bodyContent = JSON.stringify({
     data: {
@@ -319,7 +286,20 @@ const submitResetForm = async (e) => {
 }
 
 const EditProfile = () => {
+  const [disabilities, setDisabilities] = useState([])
   useLayoutEffect(() => {
+    async function fetchDisabilities() {
+      let accessToken = await getAccessToken()
+      let headersList = {
+        authorization: 'Bearer ' + accessToken,
+      }
+      console.log(headersList)
+      const response = await fetch(`http://localhost:3000/disability/all`, {
+        headers: headersList,
+      })
+      let res = await response.json()
+      return res.data
+    }
     async function fetchAuthData() {
       let res = await authData()
       console.log(res)
@@ -328,6 +308,7 @@ const EditProfile = () => {
     }
     fetchAuthData()
     async function fetchProfileData() {
+      let fetchedDisabilities = await fetchDisabilities()
       let res = await profileData()
       console.log(res)
       if (res.data) {
@@ -353,19 +334,24 @@ const EditProfile = () => {
             .getElementById('address_2_id')
             .setAttribute('data-id', res.data.Addresses[1].id)
         }
-
+        let disTypes = []
         for (var h in res.data.DisabilityCategories) {
-          let i = parseInt(h) + 1
-          let code = 'code' + i
-          if (res.data.DisabilityCategories[h].code != code) {
-            document.getElementById(
-              res.data.DisabilityCategories[h].code
-            ).checked = true
-          }
-          document
+          disTypes.push(res.data.DisabilityCategories[h].type)
+          /*document
             .getElementById('dis_id' + h)
-            .setAttribute('data-id', res.data.DisabilityCategories[h].id)
+            .setAttribute('data-id', res.data.DisabilityCategories[h].id)*/
         }
+        let disPreState = []
+        for (var i in fetchedDisabilities) {
+          let isChecked = disTypes.includes(fetchedDisabilities[i].type)
+          console.log(fetchedDisabilities[i].id + ' : ' + isChecked)
+          disPreState.push({
+            id: fetchedDisabilities[i].id,
+            type: fetchedDisabilities[i].type,
+            isChecked: isChecked,
+          })
+        }
+        setDisabilities(disPreState)
       }
     }
     fetchProfileData()
@@ -528,109 +514,14 @@ const EditProfile = () => {
                       </div>
                       <div className="col-lg-12">
                         <h4>handicaps:</h4>
-                        <div
-                          id="dis_id0"
-                          className="form-check form-check-inline"
-                        >
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id="Handicapmoteur"
-                            value="Handicap moteur"
+                        {disabilities.map((item, index) => (
+                          <SelectDisability
+                            id={item.id}
+                            type={item.type}
+                            key={index}
+                            isChecked={item.isChecked}
                           />
-                          <label
-                            className="form-check-label"
-                            htmlFor="Handicapmoteur"
-                          >
-                            Handicap moteur
-                          </label>
-                        </div>
-                        <div
-                          id="dis_id1"
-                          className="form-check form-check-inline"
-                        >
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id="Handicapsensoriel"
-                            value="Handicap sensoriel"
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor="Handicapsensoriel"
-                          >
-                            Handicap sensoriel
-                          </label>
-                        </div>
-                        <div
-                          id="dis_id2"
-                          className="form-check form-check-inline"
-                        >
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id="Handicapvisuel"
-                            value="Handicap visuel"
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor="Handicapvisuel"
-                          >
-                            Handicap visuel
-                          </label>
-                        </div>
-                        <br />
-                        <div
-                          id="dis_id3"
-                          className="form-check form-check-inline"
-                        >
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id="Handicapmental"
-                            value="Handicap mental"
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor="Handicapmental"
-                          >
-                            Handicap mental
-                          </label>
-                        </div>
-                        <div
-                          id="dis_id4"
-                          className="form-check form-check-inline"
-                        >
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id="Handicapcognitif"
-                            value="Handicap cognitif"
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor="Handicapcognitif"
-                          >
-                            Handicap cognitif
-                          </label>
-                        </div>
-                        <div
-                          id="dis_id5"
-                          className="form-check form-check-inline"
-                        >
-                          <input
-                            className="form-check-input"
-                            type="checkbox"
-                            id="Handicappsychique"
-                            value="Handicap psychique"
-                          />
-                          <label
-                            className="form-check-label"
-                            htmlFor="Handicappsychique"
-                          >
-                            Handicap psychique
-                          </label>
-                        </div>
+                        ))}
                       </div>
                       <div className="col-lg-12 text-center">
                         <br />

@@ -87,33 +87,8 @@ const createEmptyProfile = async () => {
   }
   let bodyContent = JSON.stringify({
     age: 45,
-    Addresses: [{ address: 'address 1' }, { address: 'address 2' }],
-    DisabilityCategories: [
-      {
-        code: 'code1',
-        type: 'aucun',
-      },
-      {
-        code: 'code2',
-        type: 'aucun',
-      },
-      {
-        code: 'code3',
-        type: 'aucun',
-      },
-      {
-        code: 'code4',
-        type: 'aucun',
-      },
-      {
-        code: 'code5',
-        type: 'aucun',
-      },
-      {
-        code: 'code6',
-        type: 'aucun',
-      },
-    ],
+    Addresses: [{ address: '.' }, { address: '.' }],
+    DisabilityCategories: [],
   })
 
   let response = await fetch(
@@ -131,8 +106,8 @@ const submitRegisterForm = async (e) => {
   const res = await signup()
   console.log(res)
   if (res.data) {
-    localStorage.setItem('token', res.data.accessToken)
-    localStorage.setItem('refreshToken', res.data.refreshToken)
+    localStorage.setItem('token', res.data.tokens.accessToken)
+    localStorage.setItem('refreshToken', res.data.tokens.refreshToken)
     localStorage.setItem('status', true)
     localStorage.setItem('email', document.getElementById('email').value)
     const res2 = await createEmptyProfile()

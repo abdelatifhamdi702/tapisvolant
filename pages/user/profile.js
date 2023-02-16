@@ -74,16 +74,15 @@ const profile = () => {
         }
         document.getElementById('adresses').innerHTML = adresses
         let handicaps = ''
-        if (res.data.DisabilityCategories[0].type == 'aucun') {
+        /*if (res.data.DisabilityCategories[0].type == 'aucun') {
           document.getElementById('handicaps').innerHTML = 'aucun'
-        } else {
-          for (var h in res.data.DisabilityCategories) {
-            if (res.data.DisabilityCategories[h].type != 'aucun') {
-              handicaps += res.data.DisabilityCategories[h].type + '<br />'
-            }
-          }
-          document.getElementById('handicaps').innerHTML = handicaps
+        } else {*/
+        for (var h in res.data.DisabilityCategories) {
+          //if (res.data.DisabilityCategories[h].type != 'aucun') {
+          handicaps += res.data.DisabilityCategories[h].type + '<br />'
+          //}
         }
+        document.getElementById('handicaps').innerHTML = handicaps
       }
     }
     fetchProfileData()
