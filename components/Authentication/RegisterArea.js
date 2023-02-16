@@ -65,9 +65,23 @@ const signup = async () => {
 
   return await response.json()
 }
-const createEmptyProfile = async () => {
+async function getAccessToken() {
   let headersList = {
-    authorization: 'Bearer ' + localStorage.getItem('token'),
+    authorization: 'Bearer ' + localStorage.getItem('refreshToken'),
+  }
+
+  const res6 = await fetch(`http://localhost:3000/refresh/token`, {
+    headers: headersList,
+  })
+  let response6 = await res6.json()
+
+  return response6.data.accessToken
+}
+
+const createEmptyProfile = async () => {
+  let accessToken = await getAccessToken()
+  let headersList = {
+    authorization: 'Bearer ' + accessToken,
     'Content-Type': 'application/json',
     'Cross-Origin-Resource-Policy': 'cross-origin',
   }
@@ -117,8 +131,8 @@ const submitRegisterForm = async (e) => {
   const res = await signup()
   console.log(res)
   if (res.data) {
-    localStorage.setItem('token', res.data.tokens.accessToken)
-    localStorage.setItem('refreshToken', res.data.tokens.refreshToken)
+    localStorage.setItem('token', res.data.accessToken)
+    localStorage.setItem('refreshToken', res.data.refreshToken)
     localStorage.setItem('status', true)
     localStorage.setItem('email', document.getElementById('email').value)
     const res2 = await createEmptyProfile()

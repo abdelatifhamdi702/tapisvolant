@@ -55,6 +55,7 @@ const RecommendTour = ({ title, subTitle, bgStyle }) => {
               <div className="rec-wrap">
                 {destinations.map((item, index) => (
                   <Destination
+                    id={item.id}
                     key={item.id}
                     title={item.title}
                     imgURL={'http://' + item.imgURL.replace(/\\/g, '/')}

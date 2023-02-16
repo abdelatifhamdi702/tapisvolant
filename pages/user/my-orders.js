@@ -2,14 +2,26 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import MyAccountNavbar from '../../components/MyAccount.js/MyAccountNavbar'
 import BookingRow from '../../components/common/BookingRow'
+async function getAccessToken() {
+  let headersList = {
+    authorization: 'Bearer ' + localStorage.getItem('refreshToken'),
+  }
 
+  const res6 = await fetch(`http://localhost:3000/refresh/token`, {
+    headers: headersList,
+  })
+  let response6 = await res6.json()
+
+  return response6.data.accessToken
+}
 const MyOrders = () => {
   const [bookings, setBookings] = useState([])
 
   useEffect(() => {
     const fetchBookings = async () => {
+      let accessToken = await getAccessToken()
       let headersList = {
-        authorization: 'Bearer ' + localStorage.getItem('token'),
+        authorization: 'Bearer ' + accessToken,
       }
       const response = await fetch(
         `http://${process.env.host}:${process.env.port}/booking/my`,

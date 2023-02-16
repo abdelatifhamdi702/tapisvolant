@@ -8,7 +8,18 @@ import {
 } from '@stripe/react-stripe-js'
 
 import { loadStripe } from '@stripe/stripe-js'
+async function getAccessToken() {
+  let headersList = {
+    authorization: 'Bearer ' + localStorage.getItem('refreshToken'),
+  }
 
+  const res6 = await fetch(`http://localhost:3000/refresh/token`, {
+    headers: headersList,
+  })
+  let response6 = await res6.json()
+
+  return response6.data.accessToken
+}
 const PaymentComponent = ({ price }) => {
   const [isProcessing, setIsProcessing] = useState(false)
   const [paymentStatus, setPaymentStatus] = useState('')
@@ -17,6 +28,7 @@ const PaymentComponent = ({ price }) => {
   const elements = useElements()
 
   useEffect(() => {
+    console.log(price)
     if (price === 0) return
 
     if (paymentStatus !== 'succeeded') return
@@ -34,9 +46,10 @@ const PaymentComponent = ({ price }) => {
     setIsProcessing(true)
 
     try {
+      let accessToken = await getAccessToken()
       const headersList = {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + localStorage.getItem('token'),
+        Authorization: 'Bearer ' + accessToken,
       }
 
       const bodyContent = JSON.stringify({
@@ -84,13 +97,15 @@ const PaymentComponent = ({ price }) => {
             timer: 1500,
           })
         }
+        let accessToken = await getAccessToken()
         let headersList = {
-          authorization: 'Bearer ' + localStorage.getItem('token'),
+          authorization: 'Bearer ' + accessToken,
           'Content-Type': 'application/json',
           'Cross-Origin-Resource-Policy': 'cross-origin',
         }
         let bodyContent = JSON.stringify({
           tourId: tour.id,
+          status: 'accepté',
         })
         let response = await fetch(
           `http://${process.env.host}:${process.env.port}/booking`,
@@ -170,13 +185,24 @@ const PaymentComponent = ({ price }) => {
 }
 
 const PaymentGateway = () => {
+  console.log(process.env.STRIPE_PUBLIC_API_KEY)
   const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_API_KEY)
-  const amount = parseFloat(localStorage.getItem('amount'))
-  return (
-    <Elements stripe={stripePromise}>
-      <PaymentComponent price={amount} />
-    </Elements>
-  )
+  const amount = ''
+  const [isLoaded, setIsLoaded] = useState(false)
+  useEffect(() => {
+    amount = parseFloat(localStorage.getItem('amount'))
+    console.log(amount)
+    setIsLoaded(true)
+  })
+  let comp = 'Loading...'
+  if (isLoaded) {
+    comp = (
+      <Elements stripe={stripePromise}>
+        <PaymentComponent price={0.01} />
+      </Elements>
+    )
+  }
+  return <>{comp}</>
 }
 
 export default PaymentGateway

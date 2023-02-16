@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'next/link'
 
-const Destination = ({ title, imgURL }) => {
+const Destination = ({ title, imgURL, id }) => {
   return (
     <>
       <div className="recommend-tour-item style2">
@@ -11,11 +11,19 @@ const Destination = ({ title, imgURL }) => {
         ></div>
         <div className="recommend-tour-info">
           <h4>
-            <Link href="/tours">
+            <Link
+              href={
+                '/tours?search=true&destination=' + id + '&disability=&keyword='
+              }
+            >
               <a>{title}</a>
             </Link>
           </h4>
-          <Link href="/tours">
+          <Link
+            href={
+              '/tours?search=true&destination=' + id + '&disability=&keyword='
+            }
+          >
             <a className="link">
               Explore <i className="ri-logout-circle-r-line"></i>
             </a>

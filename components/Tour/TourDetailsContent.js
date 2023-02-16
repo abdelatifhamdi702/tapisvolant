@@ -4,6 +4,19 @@ import Comment from '../common/Comment'
 import Swal from 'sweetalert2'
 import RatingInput from '../common/RatingInput'
 
+async function getAccessToken() {
+  let headersList = {
+    authorization: 'Bearer ' + localStorage.getItem('refreshToken'),
+  }
+
+  const res6 = await fetch(`http://localhost:3000/refresh/token`, {
+    headers: headersList,
+  })
+  let response6 = await res6.json()
+
+  return response6.data.accessToken
+}
+
 const TourDetailsContent = ({ activities, tour, comments }) => {
   const [clicked, setClicked] = useState(false)
   const [toggleState, setToggleState] = useState(1)
@@ -34,8 +47,9 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
         timer: 1500,
       })
     }
+    let accessToken = await getAccessToken()
     let headersList = {
-      authorization: 'Bearer ' + localStorage.getItem('token'),
+      authorization: 'Bearer ' + accessToken,
       'Content-Type': 'application/json',
       'Cross-Origin-Resource-Policy': 'cross-origin',
     }
@@ -91,8 +105,9 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
   }
 
   const uploadBooking = async () => {
+    let accessToken = await getAccessToken()
     let headersList = {
-      authorization: 'Bearer ' + localStorage.getItem('token'),
+      authorization: 'Bearer ' + accessToken,
     }
     let formData = new FormData()
 
@@ -138,13 +153,15 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
         timer: 1500,
       })
     }
+    let accessToken = await getAccessToken()
     let headersList = {
-      authorization: 'Bearer ' + localStorage.getItem('token'),
+      authorization: 'Bearer ' + accessToken,
       'Content-Type': 'application/json',
       'Cross-Origin-Resource-Policy': 'cross-origin',
     }
     let bodyContent = JSON.stringify({
       tourId: tour.id,
+      status: 'En attendant',
     })
     let response = await fetch(
       `http://${process.env.host}:${process.env.port}/booking`,

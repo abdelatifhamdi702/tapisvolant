@@ -1,9 +1,21 @@
 import React from 'react'
 import Link from '../../utils/ActiveLink'
-
-const logoutReq = async () => {
+async function getAccessToken() {
   let headersList = {
-    authorization: 'Bearer ' + localStorage.getItem('token'),
+    authorization: 'Bearer ' + localStorage.getItem('refreshToken'),
+  }
+
+  const res6 = await fetch(`http://localhost:3000/refresh/token`, {
+    headers: headersList,
+  })
+  let response6 = await res6.json()
+
+  return response6.data.accessToken
+}
+const logoutReq = async () => {
+  let accessToken = await getAccessToken()
+  let headersList = {
+    authorization: 'Bearer ' + accessToken,
   }
 
   let response = await fetch(
