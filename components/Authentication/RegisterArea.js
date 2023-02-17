@@ -113,6 +113,9 @@ const submitRegisterForm = async (e) => {
     const res2 = await createEmptyProfile()
     console.log(res2)
     document.location.href = '/'
+  } else {
+    let error = "Nom d'utilisateur déjà utilisé"
+    document.getElementById('usernameError').innerHTML = error
   }
 }
 
@@ -162,6 +165,7 @@ const RegisterArea = () => {
                           placeholder="Nom d'utilisateur"
                           required
                         />
+                        <b id="usernameError" style={{ color: '#cc3f32' }}></b>
                       </div>
                     </div>
                     <div className="col-lg-12">
