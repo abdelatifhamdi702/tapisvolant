@@ -6,6 +6,7 @@ import {
   useElements,
   useStripe,
 } from '@stripe/react-stripe-js'
+import Swal from 'sweetalert2'
 
 import { loadStripe } from '@stripe/stripe-js'
 async function getAccessToken() {
