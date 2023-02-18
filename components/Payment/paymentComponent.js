@@ -1,38 +1,22 @@
 import { useEffect, useState } from 'react'
 
+import { getAccessToken } from './getAccessToken'
+import { submitBookingForm } from './submitBooking'
+
 import {
   CardElement,
   Elements,
   useElements,
-  useStripe,
+  useStripe
 } from '@stripe/react-stripe-js'
 
 import { loadStripe } from '@stripe/stripe-js'
-async function getAccessToken() {
-  let headersList = {
-    authorization: 'Bearer ' + localStorage.getItem('refreshToken'),
-  }
 
-  const res6 = await fetch(`http://localhost:3000/refresh/token`, {
-    headers: headersList,
-  })
-  let response6 = await res6.json()
-
-  return response6.data.accessToken
-}
 const PaymentComponent = ({ price }) => {
   const [isProcessing, setIsProcessing] = useState(false)
   const [paymentStatus, setPaymentStatus] = useState('')
-
   const stripe = useStripe()
   const elements = useElements()
-
-  useEffect(() => {
-    console.log(price)
-    if (price === 0) return
-
-    if (paymentStatus !== 'succeeded') return
-  })
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -49,11 +33,11 @@ const PaymentComponent = ({ price }) => {
       let accessToken = await getAccessToken()
       const headersList = {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + accessToken,
+        Authorization: 'Bearer ' + accessToken
       }
 
       const bodyContent = JSON.stringify({
-        price,
+        price
       })
 
       const res = await fetch(
@@ -61,7 +45,7 @@ const PaymentComponent = ({ price }) => {
         {
           method: 'POST',
           body: bodyContent,
-          headers: headersList,
+          headers: headersList
         }
       )
       const jsonRes = await res.json()
@@ -70,66 +54,21 @@ const PaymentComponent = ({ price }) => {
 
       const { paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
-          card: cardEl,
-        },
+          card: cardEl
+        }
       })
-      const submitBookingForm = async () => {
-        const res = await createBooking()
-        console.log(res)
-        if (res.data) {
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Votre réservation a été effectuée avec succès',
-            showConfirmButton: false,
-            timer: 1500,
-          })
-        }
-      }
 
-      const createBooking = async () => {
-        if (!localStorage.getItem('token')) {
-          Swal.fire({
-            position: 'center',
-            icon: 'error',
-            title: "Vous devez d'abord connecter a votre compte",
-            showConfirmButton: false,
-            timer: 1500,
-          })
-        }
-        let accessToken = await getAccessToken()
-        let headersList = {
-          authorization: 'Bearer ' + accessToken,
-          'Content-Type': 'application/json',
-          'Cross-Origin-Resource-Policy': 'cross-origin',
-        }
-        let bodyContent = JSON.stringify({
-          tourId: tour.id,
-          status: 'accepté',
-        })
-        let response = await fetch(
-          `http://${process.env.host}:${process.env.port}/booking`,
-          {
-            method: 'POST',
-            headers: headersList,
-            body: bodyContent,
-          }
-        )
-        return await response.json()
-      }
       if (!paymentIntent) {
         setPaymentStatus('Payment failed!')
       } else {
         setPaymentStatus(paymentIntent.status)
-        if (paymentIntent.status) {
-          submitBookingForm()
-        }
+        // submit booking
+        await submitBookingForm()
       }
     } catch (error) {
       console.error(error)
       setPaymentStatus('Payment failed!')
     }
-
     setIsProcessing(false)
   }
 
@@ -140,14 +79,14 @@ const PaymentComponent = ({ price }) => {
       fontSmoothing: 'antialiased',
       fontSize: '16px',
       '::placeholder': {
-        color: '#32325d',
-      },
+        color: '#32325d'
+      }
     },
     invalid: {
       fontFamily: 'Arial, sans-serif',
       color: '#fa755a',
-      iconColor: '#fa755a',
-    },
+      iconColor: '#fa755a'
+    }
   }
 
   return (
@@ -164,7 +103,7 @@ const PaymentComponent = ({ price }) => {
             <i
               style={{
                 marginTop: '5px',
-                marginLeft: '5px',
+                marginLeft: '5px'
               }}
               className="ri-logout-circle-r-line"
             ></i>
@@ -185,24 +124,23 @@ const PaymentComponent = ({ price }) => {
 }
 
 const PaymentGateway = () => {
-  console.log(process.env.STRIPE_PUBLIC_API_KEY)
+  const [amount, setAmount] = useState(0)
   const stripePromise = loadStripe(process.env.STRIPE_PUBLIC_API_KEY)
-  const amount = ''
-  const [isLoaded, setIsLoaded] = useState(false)
   useEffect(() => {
-    amount = parseFloat(localStorage.getItem('amount'))
-    console.log(amount)
-    setIsLoaded(true)
+    setAmount(parseFloat(localStorage.getItem('amount')))
   })
-  let comp = 'Loading...'
-  if (isLoaded) {
-    comp = (
-      <Elements stripe={stripePromise}>
-        <PaymentComponent price={0.01} />
-      </Elements>
-    )
-  }
-  return <>{comp}</>
+
+  return (
+    <>
+      {amount > 0 ? (
+        <Elements stripe={stripePromise}>
+          <PaymentComponent price={amount} />
+        </Elements>
+      ) : (
+        'Loading...'
+      )}
+    </>
+  )
 }
 
 export default PaymentGateway
