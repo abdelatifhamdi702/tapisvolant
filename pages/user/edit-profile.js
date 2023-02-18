@@ -219,9 +219,6 @@ const submitEditAuthForm = async (e) => {
   }
 }
 
-var token = localStorage.getItem('token')
-var email = localStorage.getItem('email')
-
 function CheckPassword(inputtxt) {
   var decimal =
     /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{8,50}$/
@@ -254,6 +251,7 @@ const reset = async () => {
     'Content-Type': 'application/json',
     'Cross-Origin-Resource-Policy': 'cross-origin',
   }
+  var email = localStorage.getItem('email')
   let bodyContent = JSON.stringify({
     token: refreshToken,
     password: password,
