@@ -7,7 +7,7 @@ import {
   CardElement,
   Elements,
   useElements,
-  useStripe
+  useStripe,
 } from '@stripe/react-stripe-js'
 import Swal from 'sweetalert2'
 
@@ -34,11 +34,11 @@ const PaymentComponent = ({ price }) => {
       let accessToken = await getAccessToken()
       const headersList = {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + accessToken
+        Authorization: 'Bearer ' + accessToken,
       }
 
       const bodyContent = JSON.stringify({
-        price
+        price,
       })
 
       const res = await fetch(
@@ -46,17 +46,19 @@ const PaymentComponent = ({ price }) => {
         {
           method: 'POST',
           body: bodyContent,
-          headers: headersList
+          headers: headersList,
         }
       )
       const jsonRes = await res.json()
+
+      console.log(jsonRes)
 
       const { client_secret: clientSecret } = jsonRes.data
 
       const { paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
-          card: cardEl
-        }
+          card: cardEl,
+        },
       })
 
       if (!paymentIntent) {
@@ -80,14 +82,14 @@ const PaymentComponent = ({ price }) => {
       fontSmoothing: 'antialiased',
       fontSize: '16px',
       '::placeholder': {
-        color: '#32325d'
-      }
+        color: '#32325d',
+      },
     },
     invalid: {
       fontFamily: 'Arial, sans-serif',
       color: '#fa755a',
-      iconColor: '#fa755a'
-    }
+      iconColor: '#fa755a',
+    },
   }
 
   return (
@@ -96,7 +98,7 @@ const PaymentComponent = ({ price }) => {
         <h5>Remplissez les informations de votre carte et payez maintenant</h5>
         <br />
         <CardElement options={{ style: STYLE }}></CardElement>
-        {isProcessing && <div class="spinner" id="spinner"></div>}
+        {isProcessing && <div className="spinner" id="spinner"></div>}
         <br />
         {!isProcessing && (
           <button className="payment-btn" id="submit">
@@ -104,7 +106,7 @@ const PaymentComponent = ({ price }) => {
             <i
               style={{
                 marginTop: '5px',
-                marginLeft: '5px'
+                marginLeft: '5px',
               }}
               className="ri-logout-circle-r-line"
             ></i>

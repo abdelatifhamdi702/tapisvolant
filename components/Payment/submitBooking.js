@@ -10,7 +10,15 @@ export const submitBookingForm = async () => {
       icon: 'success',
       title: 'Votre réservation a été effectuée avec succès',
       showConfirmButton: false,
-      timer: 1500
+      timer: 1500,
+    })
+  } else {
+    Swal.fire({
+      position: 'center',
+      icon: 'error',
+      title: "Quelque chose s'est mal passé essaie encore!",
+      showConfirmButton: false,
+      timer: 1500,
     })
   }
 }
@@ -22,25 +30,26 @@ const createBooking = async () => {
       icon: 'error',
       title: "Vous devez d'abord connecter a votre compte",
       showConfirmButton: false,
-      timer: 1500
+      timer: 1500,
     })
   }
   let accessToken = await getAccessToken()
   let headersList = {
     authorization: 'Bearer ' + accessToken,
     'Content-Type': 'application/json',
-    'Cross-Origin-Resource-Policy': 'cross-origin'
+    'Cross-Origin-Resource-Policy': 'cross-origin',
   }
+  let tourId = localStorage.getItem('tourId')
   let bodyContent = JSON.stringify({
-    tourId: tour.id,
-    status: 'accepté'
+    tourId: tourId,
+    status: 'Accepté',
   })
   let response = await fetch(
     `http://${process.env.host}:${process.env.port}/booking`,
     {
       method: 'POST',
       headers: headersList,
-      body: bodyContent
+      body: bodyContent,
     }
   )
   return await response.json()
