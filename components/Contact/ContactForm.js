@@ -4,7 +4,7 @@ import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
 const MySwal = withReactContent(Swal)
 import baseUrl from '../../utils/baseUrl'
-
+import { useTranslation } from 'react-i18next'
 const alertContent = () => {
   MySwal.fire({
     title: 'Congratulations!',
@@ -26,6 +26,7 @@ const INITIAL_STATE = {
 }
 
 const ContactForm = () => {
+  const { t } = useTranslation()
   const [contact, setContact] = useState(INITIAL_STATE)
 
   const handleChange = (e) => {
@@ -54,18 +55,26 @@ const ContactForm = () => {
       <div className="col-lg-12">
         <div className="contact-form">
           <div className="section-title style1 text-center mb-30">
-            <span>Nous contacter</span>
-            <h2>Entrer en contact</h2>
+            <span>{t('navbar:contactUs')}</span>
+            <h2>{t('contactus:getintouch')}</h2>
           </div>
 
-          <form className="form-wrap" onSubmit={handleSubmit}>
+          {/*<form className="form-wrap" onSubmit={handleSubmit}>*/}
+          <form
+            action="https://formsubmit.co/info@tapis-volant.fr"
+            method="POST"
+            role="form"
+            className="form-wrap"
+          >
             <div className="row">
               <div className="col-lg-6">
                 <div className="form-group">
+                  <label style={{ marginBottom: '10px' }}>
+                    {t('contactus:input1')}
+                  </label>
                   <input
                     type="text"
                     name="name"
-                    placeholder="Nom et prénom"
                     className="form-control"
                     value={contact.name}
                     onChange={handleChange}
@@ -75,10 +84,12 @@ const ContactForm = () => {
               </div>
               <div className="col-lg-6">
                 <div className="form-group">
+                  <label style={{ marginBottom: '10px' }}>
+                    {t('contactus:input2')}
+                  </label>
                   <input
                     type="text"
                     name="email"
-                    placeholder="Email"
                     className="form-control"
                     value={contact.email}
                     onChange={handleChange}
@@ -88,10 +99,12 @@ const ContactForm = () => {
               </div>
               <div className="col-lg-6">
                 <div className="form-group">
+                  <label style={{ marginBottom: '10px' }}>
+                    {t('contactus:input3')}
+                  </label>
                   <input
                     type="text"
                     name="number"
-                    placeholder="Téléphone"
                     className="form-control"
                     value={contact.number}
                     onChange={handleChange}
@@ -101,10 +114,12 @@ const ContactForm = () => {
               </div>
               <div className="col-lg-6">
                 <div className="form-group">
+                  <label style={{ marginBottom: '10px' }}>
+                    {t('contactus:input4')}
+                  </label>
                   <input
                     type="text"
                     name="subject"
-                    placeholder="Sujet"
                     className="form-control"
                     value={contact.subject}
                     onChange={handleChange}
@@ -114,11 +129,13 @@ const ContactForm = () => {
               </div>
               <div className="col-lg-12">
                 <div className="form-group">
+                  <label style={{ marginBottom: '10px' }}>
+                    {t('contactus:input5')}
+                  </label>
                   <textarea
                     name="text"
                     cols="30"
                     rows="6"
-                    placeholder="Ecrire un message..."
                     className="form-control"
                     value={contact.text}
                     onChange={handleChange}
@@ -128,7 +145,7 @@ const ContactForm = () => {
               </div>
               <div className="col-lg-12 col-sm-12">
                 <button type="submit" className="btn v5">
-                  Envoyer
+                  {t('contactus:btn')}
                 </button>
               </div>
             </div>

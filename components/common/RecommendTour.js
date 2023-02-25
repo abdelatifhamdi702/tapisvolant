@@ -1,14 +1,16 @@
 import Link from 'next/link'
 import Destination from '../Destination/Destination'
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 
 const RecommendTour = ({ title, subTitle, bgStyle }) => {
   const [destinations, setDestinations] = useState([])
-
+  var router = useRouter()
+  const { locale } = router
   useEffect(() => {
     const fetchDestinations = async () => {
       const response = await fetch(
-        `http://${process.env.host}:${process.env.port}/destination`
+        `http://${process.env.host}:${process.env.port}/destination?locale=${locale}`
       )
 
       /*if (!response.ok) {
@@ -35,7 +37,7 @@ const RecommendTour = ({ title, subTitle, bgStyle }) => {
     }
 
     fetchDestinations()
-  }, [])
+  }, [locale])
   return (
     <>
       <section className={`recommend-tour-area ${bgStyle} ptb-100`}>

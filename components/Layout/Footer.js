@@ -1,7 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 
 const Footer = () => {
+  const { t } = useTranslation()
+
   return (
     <>
       <footer className="footer-wrap style1 bg-heath">
@@ -14,12 +17,12 @@ const Footer = () => {
                   <ul className="footer-menu">
                     <li>
                       <Link href="/about-us">
-                        <a>Qui sommes-nous</a>
+                        <a>{t('navbar:aboutUs')}</a>
                       </Link>
                     </li>
                     <li>
                       <Link href="/contact-us">
-                        <a>Nous contacter</a>
+                        <a>{t('navbar:contactUs')}</a>
                       </Link>
                     </li>
                   </ul>
@@ -27,16 +30,18 @@ const Footer = () => {
               </div>
               <div className="col-lg-3 col-md-6 col-sm-6">
                 <div className="footer-widget">
-                  <h4 className="footer-widget-title">Services</h4>
+                  <h4 className="footer-widget-title">
+                    {t('footer:services')}
+                  </h4>
                   <ul className="footer-menu">
                     <li>
                       <Link href="/tours">
-                        <a href="tours">Séjours</a>
+                        <a href="tours">{t('navbar:tour')}</a>
                       </Link>
                     </li>
                     <li>
                       <Link href="/destination">
-                        <a>Destination</a>
+                        <a>{t('navbar:destination')}</a>
                       </Link>
                     </li>
                   </ul>
@@ -44,16 +49,18 @@ const Footer = () => {
               </div>
               <div className="col-lg-3 col-md-6 col-sm-6">
                 <div className="footer-widget">
-                  <h4 className="footer-widget-title">Information</h4>
+                  <h4 className="footer-widget-title">
+                    {t('footer:information')}
+                  </h4>
                   <ul className="footer-menu">
                     <Link href="/concerned-people">
                       <li>
-                        <a>Les personnes concernes par les séjours</a>
+                        <a>{t('navbar:concernedPeople')}</a>
                       </li>
                     </Link>
                     <li>
                       <Link href="/financing">
-                        <a>Ou chercher les financements pour mon voyage</a>
+                        <a>{t('navbar:financing')}</a>
                       </Link>
                     </li>
                   </ul>
@@ -61,8 +68,8 @@ const Footer = () => {
               </div>
               <div className="col-lg-3 col-md-6 col-sm-6">
                 <div className="footer-widget">
-                  <h4 className="footer-widget-title">Paiement Sécurisé</h4>
-                  <p>Modes de règlement acceptés :</p>
+                  <h4 className="footer-widget-title">{t('footer:paySec')}</h4>
+                  <p>{t('footer:payMethodes')} :</p>
                   <ul className="payment-option">
                     <li>
                       <img src="/images/paypal.png" alt="Image" />
@@ -108,7 +115,7 @@ const Footer = () => {
                 <div className="copyright-text">
                   <p>
                     Copyright <span className="las la-copyright"></span> 2023
-                    Tapis Volant. All Rights Reserved
+                    Tapis Volant. {t('footer:rights')}
                   </p>
                 </div>
               </div>

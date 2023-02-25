@@ -1,7 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 
 const PageBanner = ({ bannerTitle, pageName }) => {
+  const { t } = useTranslation('navbar')
+
   return (
     <>
       <section className="breadcrumb-wrap style2 bg-heath">
@@ -22,7 +25,7 @@ const PageBanner = ({ bannerTitle, pageName }) => {
                 <ul className="breadcrumb-menu">
                   <li>
                     <Link href="/">
-                      <a>Accueil </a>
+                      <a>{t('home')} </a>
                     </Link>
                     <i className="las la-angle-double-right"></i>
                   </li>

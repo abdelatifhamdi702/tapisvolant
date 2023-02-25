@@ -5,13 +5,30 @@ import Service from '../components/common/Service'
 import BestTour from '../components/common/BestTour'
 import NewsletterThree from '../components/common/NewsletterThree'
 import Promo from '../components/common/Promo'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useTranslation } from 'react-i18next'
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        'navbar',
+        'footer',
+        'aboutus',
+      ])),
+      // Will be passed to the page component as props
+    },
+  }
+}
 
 const AboutUs = () => {
+  const { t } = useTranslation('aboutus')
+
   return (
     <>
       <PageBannerTwo
-        bannerTitle="Qui sommes-nous"
-        pageName="Qui sommes-nous"
+        bannerTitle={t('title')}
+        pageName={t('title')}
         bgImageCss="br-bg-1"
       />
 

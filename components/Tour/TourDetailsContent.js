@@ -3,6 +3,7 @@ import Activity from '../common/Activity'
 import Comment from '../common/Comment'
 import Swal from 'sweetalert2'
 import RatingInput from '../common/RatingInput'
+import { useTranslation } from 'react-i18next'
 
 async function getAccessToken() {
   let headersList = {
@@ -18,6 +19,7 @@ async function getAccessToken() {
 }
 
 const TourDetailsContent = ({ activities, tour, comments }) => {
+  const { t } = useTranslation('tourdetails')
   const [clicked, setClicked] = useState(false)
   const [toggleState, setToggleState] = useState(1)
   const [rating, setRating] = useState(0)
@@ -42,7 +44,7 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
       Swal.fire({
         position: 'center',
         icon: 'error',
-        title: "Vous devez d'abord connecter a votre compte",
+        title: t('errormessage'),
         showConfirmButton: false,
         timer: 1500,
       })
@@ -97,7 +99,7 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
       Swal.fire({
         position: 'center',
         icon: 'success',
-        title: 'Votre commentaire est envoyé avec succès',
+        title: t('commentsuccessmessage'),
         showConfirmButton: false,
         timer: 1500,
       })
@@ -136,7 +138,16 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
       Swal.fire({
         position: 'center',
         icon: 'success',
-        title: 'Votre réservation a été effectuée avec succès',
+        title: t('bookingsuccessmessage'),
+        showConfirmButton: false,
+        timer: 1500,
+      })
+    }
+    if (res.statusCode == 403) {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: t('errormessage2'),
         showConfirmButton: false,
         timer: 1500,
       })
@@ -148,7 +159,7 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
       Swal.fire({
         position: 'center',
         icon: 'error',
-        title: "Vous devez d'abord connecter a votre compte",
+        title: t('errormessage'),
         showConfirmButton: false,
         timer: 1500,
       })
@@ -195,7 +206,9 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
               ))}
             </div>
             <div className="post-comment-wrap">
-              <h4 className="comment-title">{comments.length} Commentaires</h4>
+              <h4 className="comment-title">
+                {comments.length} {t('comments')}
+              </h4>
               {comments.map((item, index) => (
                 <Comment
                   key={index}
@@ -208,18 +221,20 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
             </div>
             <div className="comment-form-wrap">
               <div className="comment-form-title">
-                <h4>Écrivez votre commentaire</h4>
+                <h4>{t('writecomment')}</h4>
               </div>
               <form onSubmit={submitCommentForm} className="comment-form">
                 <div className="row gx-3">
                   <div className="col-lg-12">
                     <div className="form-group v1">
+                      <label style={{ marginBottom: '10px' }}>
+                        {t('input')}
+                      </label>
                       <textarea
                         name="review-msg"
                         id="review-msg"
                         cols="30"
                         rows="10"
-                        placeholder="Votre commentaires..."
                       ></textarea>
                     </div>
                   </div>
@@ -232,7 +247,7 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
                     </ul>
 
                     <button type="submit" className="btn v7">
-                      Envoyer <i className="ri-logout-circle-r-line"></i>{' '}
+                      {t('btn')} <i className="ri-logout-circle-r-line"></i>{' '}
                     </button>
                   </div>
                 </div>
@@ -242,8 +257,8 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
           <div className="col-xl-3 col-lg-4 col-md-12 col-12">
             <div className="sidebar">
               <div className="sidebar-widget tour-book">
-                <h4>Pour Reserver</h4>
-                <p>Upload le reçu de paiement</p>
+                <h4>{t('paytext1')}</h4>
+                <p>{t('paytext2')}</p>
                 <input
                   className="form-control"
                   id="receiptImg"
@@ -255,12 +270,11 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
                   className="book-btn"
                   onClick={submitBookingForm}
                 >
-                  Reserver maintenant{' '}
-                  <i className="ri-logout-circle-r-line"></i>{' '}
+                  {t('paybtn1')} <i className="ri-logout-circle-r-line"></i>{' '}
                 </button>
                 <br />
-                <h4>Ou</h4>
-                <p>Payez le montant en cliquant sur le bouton ci-dessous</p>
+                <h4>{t('paytext3')}</h4>
+                <p>{t('paytext4')}</p>
 
                 {/*<div className="input-group">
                   <input
@@ -290,7 +304,7 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
                   <input type="text" placeholder="Destination" />
                 </div>*/}
                 <button type="button" className="book-btn" onClick={pay}>
-                  payer <i className="ri-logout-circle-r-line"></i>{' '}
+                  {t('paybtn2')} <i className="ri-logout-circle-r-line"></i>{' '}
                 </button>
               </div>
               {/*<div className="sidebar-widget tour-map">

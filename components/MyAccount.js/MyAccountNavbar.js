@@ -1,5 +1,7 @@
 import React from 'react'
 import Link from '../../utils/ActiveLink'
+import { useTranslation } from 'react-i18next'
+
 async function getAccessToken() {
   let headersList = {
     authorization: 'Bearer ' + localStorage.getItem('refreshToken'),
@@ -42,30 +44,31 @@ const logout = async (e) => {
 }
 
 const MyAccountNavbar = () => {
+  const { t } = useTranslation('myaccount')
   return (
     <>
       <div className="col-lg-3">
         <ul className="nav nav-tabs user-tablist" id="myTab">
           <Link href="/user/profile" activeClassName="active">
             <li className="nav-item">
-              <button className="nav-link">Profile</button>
+              <button className="nav-link">{t('nav1')}</button>
             </li>
           </Link>
 
           <Link href="/user/edit-profile" activeClassName="active">
             <li className="nav-item">
-              <button className="nav-link">Modifier mon profile</button>
+              <button className="nav-link">{t('nav2')}</button>
             </li>
           </Link>
 
           <Link href="/user/my-orders" activeClassName="active">
             <li className="nav-item">
-              <button className="nav-link">Mes réservations</button>
+              <button className="nav-link">{t('nav3')}</button>
             </li>
           </Link>
           <li className="nav-item">
             <button className="nav-link" onClick={logout}>
-              Se déconnecter
+              {t('nav4')}
             </button>
           </li>
         </ul>

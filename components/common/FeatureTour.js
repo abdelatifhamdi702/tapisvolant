@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 const FeatureTour = ({ viewButton }) => {
   const [tours, setTours] = useState([])
   var router = useRouter()
+  const { locale } = router
   var destination = router.query.destination
   var disability = router.query.disability
   var keyword = router.query.keyword
@@ -13,7 +14,7 @@ const FeatureTour = ({ viewButton }) => {
   useEffect(() => {
     const fetchTours = async (url) => {
       if (router && router.query && router.query.search) {
-        url = `http://${process.env.host}:${process.env.port}/tour/search/?destinationId=${destination}&disability=${disability}&title=${keyword}`
+        url = `http://${process.env.host}:${process.env.port}/tour/search/?destinationId=${destination}&disability=${disability}&title=${keyword}&locale=${locale}`
         const response = await fetch(url)
 
         /*if (!response.ok) {
@@ -43,7 +44,7 @@ const FeatureTour = ({ viewButton }) => {
 
         setTours(loadedTours)
       } else {
-        url = `http://${process.env.host}:${process.env.port}/tour/all/`
+        url = `http://${process.env.host}:${process.env.port}/tour/all/?locale=${locale}`
         const response = await fetch(url)
 
         /*if (!response.ok) {

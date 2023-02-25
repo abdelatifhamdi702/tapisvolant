@@ -2,6 +2,23 @@ import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import MyAccountNavbar from '../../components/MyAccount.js/MyAccountNavbar'
 import BookingRow from '../../components/common/BookingRow'
+import { useTranslation } from 'react-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { useRouter } from 'next/router'
+
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        'navbar',
+        'footer',
+        'mybookings',
+        'myaccount',
+      ])),
+      // Will be passed to the page component as props
+    },
+  }
+}
 async function getAccessToken() {
   let headersList = {
     authorization: 'Bearer ' + localStorage.getItem('refreshToken'),
@@ -16,6 +33,9 @@ async function getAccessToken() {
 }
 const MyOrders = () => {
   const [bookings, setBookings] = useState([])
+  var router = useRouter()
+  const { locale } = router
+  const { t } = useTranslation('mybookings')
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -24,7 +44,7 @@ const MyOrders = () => {
         authorization: 'Bearer ' + accessToken,
       }
       const response = await fetch(
-        `http://${process.env.host}:${process.env.port}/booking/my`,
+        `http://${process.env.host}:${process.env.port}/booking/my?locale=${locale}`,
         {
           headers: headersList,
         }
@@ -47,7 +67,7 @@ const MyOrders = () => {
         loadedBookings.push({
           title: responseData.data[key].Tour.title,
           price: responseData.data[key].Tour.price,
-          status: responseData.data[key].status,
+          status: t(responseData.data[key].status),
           imgURL: correctPath,
           date: date,
         })
@@ -58,7 +78,8 @@ const MyOrders = () => {
     }
 
     fetchBookings()
-  }, [])
+  }, [locale])
+
   return (
     <>
       <section className="Login-wrap pt-100 pb-100">
@@ -68,15 +89,15 @@ const MyOrders = () => {
             <div className="col-lg-9">
               <div className="tab-content" id="myTabContent">
                 <div>
-                  <h2 className="account-title">Mes réservations</h2>
+                  <h2 className="account-title">{t('title')}</h2>
                   <div className="wishlist-table ">
                     <table className="table">
                       <thead>
                         <tr>
-                          <th scope="col">Séjour</th>
-                          <th scope="col">Date</th>
-                          <th scope="col">Prix</th>
-                          <th scope="col">Status</th>
+                          <th scope="col">{t('th1')}</th>
+                          <th scope="col">{t('th2')}</th>
+                          <th scope="col">{t('th3')}</th>
+                          <th scope="col">{t('th4')}</th>
                         </tr>
                       </thead>
                       <tbody>

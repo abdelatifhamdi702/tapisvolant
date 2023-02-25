@@ -1,30 +1,37 @@
 import React, { useEffect, useState } from 'react'
-const search = () => {
-  var e = document.getElementById('destinationSelect')
-  var value = e.value
-  var e2 = document.getElementById('disSelect')
-  var text = e2.options[e2.selectedIndex].text
-  var keyword = document.getElementById('keyWord').value
+import { useTranslation } from 'react-i18next'
+import { useRouter } from 'next/router'
 
-  document.location.href =
-    '/tours?' +
-    'search=' +
-    'true' +
-    '&destination=' +
-    value +
-    '&disability=' +
-    text +
-    '&keyword=' +
-    keyword
-}
 const Banner = () => {
+  const { t } = useTranslation('index')
   const [destinations, setDestinations] = useState([])
   const [disabilities, setDisabilities] = useState([])
+  var router = useRouter()
+  const { locale } = router
+  const search = () => {
+    var e = document.getElementById('destinationSelect')
+    var value = e.value
+    var e2 = document.getElementById('disSelect')
+    var text = e2.options[e2.selectedIndex].value
+    var keyword = document.getElementById('keyWord').value
 
+    document.location.href =
+      '/' +
+      locale +
+      '/tours?' +
+      'search=' +
+      'true' +
+      '&destination=' +
+      value +
+      '&disability=' +
+      text +
+      '&keyword=' +
+      keyword
+  }
   useEffect(() => {
     const fetchDestinations = async () => {
       const response = await fetch(
-        `http://${process.env.host}:${process.env.port}/destination`
+        `http://${process.env.host}:${process.env.port}/destination?locale=${locale}`
       )
 
       /*if (!response.ok) {
@@ -54,7 +61,7 @@ const Banner = () => {
 
     const fetchDisabilities = async () => {
       const response = await fetch(
-        `http://${process.env.host}:${process.env.port}/disability/all`
+        `http://${process.env.host}:${process.env.port}/disability/all?locale=${locale}`
       )
 
       /*if (!response.ok) {
@@ -69,6 +76,7 @@ const Banner = () => {
         loadedDisabilities.push({
           id: responseData.data[key].id,
           type: responseData.data[key].type,
+          code: responseData.data[key].code,
         })
       }
       console.log(loadedDisabilities)
@@ -77,7 +85,7 @@ const Banner = () => {
     }
 
     fetchDisabilities()
-  }, [])
+  }, [locale])
   return (
     <>
       <div className="hero-wrap style2">
@@ -86,18 +94,14 @@ const Banner = () => {
             <div className="col-xl-7 col-lg-8">
               <div className="hero-content style2 text-left">
                 <h1>
-                  Voyager, Découvrir.
+                  {t('bannertitle1')}
                   <br />
-                  <span>Créer des souvenirs, pas des rêves.</span>
+                  <span>{t('bannertitle2')}</span>
                 </h1>
                 <div className="filter-tours-wrap style2">
                   <div className="filter-box">
                     <div className="form-group">
-                      <input
-                        type="search"
-                        id="keyWord"
-                        placeholder="Mots clés"
-                      />
+                      <input type="search" id="keyWord" />
                     </div>
                   </div>
                   <div className="filter-box">
@@ -116,7 +120,7 @@ const Banner = () => {
                     <div className="filter-dropdown">
                       <select className="hero-filter" id="disSelect">
                         {disabilities.map((item, index) => (
-                          <option key={item.id} value={item.type}>
+                          <option key={item.id} value={item.code}>
                             {item.type}
                           </option>
                         ))}
@@ -128,7 +132,7 @@ const Banner = () => {
                   </div>
                   <div className="filter-box">
                     <button onClick={search} className="search-btn">
-                      Rechercher <i className="ri-search-line"></i>
+                      {t('bannerbtn')} <i className="ri-search-line"></i>
                     </button>
                   </div>
                 </div>

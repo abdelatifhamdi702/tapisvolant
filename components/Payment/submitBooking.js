@@ -16,7 +16,7 @@ export const submitBookingForm = async () => {
     Swal.fire({
       position: 'center',
       icon: 'error',
-      title: "Quelque chose s'est mal passé essaie encore!",
+      title: "Désolé, quelque chose s'est mal passé. réessayer s'il vous plait",
       showConfirmButton: false,
       timer: 1500,
     })

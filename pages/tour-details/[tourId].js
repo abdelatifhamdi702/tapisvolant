@@ -2,13 +2,30 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import PageBannerThree from '../../components/common/PageBannerThree'
 import TourDetailsContent from '../../components/Tour/TourDetailsContent'
+import { useTranslation } from 'react-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
+export async function getServerSideProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        'navbar',
+        'footer',
+        'tourdetails',
+      ])),
+      // Will be passed to the page component as props
+    },
+  }
+}
 const TourDetails = () => {
+  const { t } = useTranslation('tourdetails')
+
   const [tour, setTour] = useState()
   const [activities, setActivities] = useState()
   const [comments, setComments] = useState()
   const [cover, setCover] = useState()
   var router = useRouter()
+  const { locale } = router
   var id = router.query.tourId
   console.log(id)
   useEffect(() => {
@@ -20,7 +37,7 @@ const TourDetails = () => {
     }
     const fetchTour = async () => {
       const response = await fetch(
-        `http://${process.env.host}:${process.env.port}/tour/one/` + id
+        `http://${process.env.host}:${process.env.port}/tour/one/${id}/?locale=${locale}`
       )
 
       const responseData = await response.json()
@@ -59,7 +76,7 @@ const TourDetails = () => {
       setTour(loadedTour)
     }
     fetchTour()
-  }, [])
+  }, [locale])
 
   if (tour === undefined) {
     return null
@@ -69,7 +86,7 @@ const TourDetails = () => {
     <>
       <PageBannerThree
         bannerTitle={tour.title}
-        pageName="Détails de séjour"
+        pageName={t('title')}
         bgImageSrc={cover}
       />
 

@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import Link from '../../utils/ActiveLink'
+import { useTranslation } from 'react-i18next'
+import { useRouter } from 'next/router'
 
 const Navbar = () => {
+  const router = useRouter()
+  const { t } = useTranslation(['navbar'])
   const [display, setDisplay] = useState(false)
   const [displayContact, setDisplayContact] = useState(false)
   const [displayMobileMenu, setDisplayMobileMenu] = useState(false)
@@ -37,7 +41,7 @@ const Navbar = () => {
   //set language
   const [open, setOpen] = useState(false)
   const [clicked, setClicked] = useState(false)
-  const [name, setName] = useState('Français')
+  const [name, setName] = useState('')
 
   //set currency
   const [openCurrency, setOpenCurrency] = useState(false)
@@ -52,7 +56,10 @@ const Navbar = () => {
   const toggleCategory = () => {
     setOpen(!open)
   }
-  const category = ['English', 'Français', 'العربية']
+  const category = [
+    { text: 'English', value: 'en' },
+    { text: 'Français', value: 'fr' },
+  ]
 
   // Toggle function for select language
   const toggleSelected = (cat, index) => {
@@ -60,7 +67,10 @@ const Navbar = () => {
       return setClicked(null)
     }
     setClicked(index)
-    setName(cat)
+    setName(cat.text)
+    const { pathname, asPath, query } = router
+    // change just the locale and maintain all other route information including href's query
+    router.push({ pathname, query }, asPath, { locale: cat.value })
   }
 
   // toggle currency
@@ -80,6 +90,9 @@ const Navbar = () => {
 
   useEffect(() => {
     setIsLogin(localStorage.getItem('status') === 'true')
+    const { locale } = router
+    let obj = category.find((o) => o.value === locale)
+    if (obj) setName(obj.text)
   })
 
   /*const isLogin = () => {
@@ -87,7 +100,7 @@ const Navbar = () => {
     let result = localStorage.getItem('status')
     return result
   }*/
-
+  const { locale } = router
   return (
     <>
       <div className="page-wrapper">
@@ -110,9 +123,7 @@ const Navbar = () => {
                         <i className="las la-times"></i>
                       </button>
                     </div>
-                    <p>
-                      Vacances adaptées pour adultes en situation de handicap.
-                    </p>
+                    <p>{t('definition')}</p>
                   </div>
                 </div>
 
@@ -121,13 +132,15 @@ const Navbar = () => {
                     {isLogin ? (
                       <Link href="/user/profile">
                         <a className="link style3">
-                          <i className="ri-user-line"></i>Mon profile
+                          <i className="ri-user-line"></i>
+                          {t('myProfile')}
                         </a>
                       </Link>
                     ) : (
                       <Link href="/log-in">
                         <a className="link style3">
-                          <i className="ri-user-line"></i>Se connecter
+                          <i className="ri-user-line"></i>
+                          {t('login')}
                         </a>
                       </Link>
                     )}
@@ -141,6 +154,7 @@ const Navbar = () => {
                           category.map((cat, index) => (
                             <li
                               key={index}
+                              value={cat.value}
                               onClick={(e) => toggleSelected(cat, index)}
                               onChange={(e) => e}
                               className={
@@ -149,7 +163,7 @@ const Navbar = () => {
                                   : 'option'
                               }
                             >
-                              {cat}
+                              {cat.text}
                             </li>
                           ))}
                       </ul>
@@ -241,7 +255,7 @@ const Navbar = () => {
                     <div id="menu">
                       <ul className="main-menu">
                         <li>
-                          <a href="/">Accueil</a>
+                          <a href="/">{t('home')}</a>
                           {/*
                           <span className="menu-expand">
                             <i className="las la-angle-down"></i>
@@ -266,7 +280,9 @@ const Navbar = () => {
                         </li>
 
                         <li className="has-children">
-                          <a href="/tours">Séjours</a>
+                          <Link href="/tours" activeClassName="active">
+                            <a>{t('tour')}</a>
+                          </Link>
 
                           <span className="menu-expand">
                             <i className="las la-angle-down"></i>
@@ -274,7 +290,7 @@ const Navbar = () => {
                           <ul className="sub-menu">
                             <li>
                               <Link href="/tours" activeClassName="active">
-                                <a>Séjours</a>
+                                <a>{t('tour')}</a>
                               </Link>
                             </li>
                             <li>
@@ -282,20 +298,20 @@ const Navbar = () => {
                                 href="/concerned-people"
                                 activeClassName="active"
                               >
-                                <a>Les personnes concernes par les séjours</a>
+                                <a>{t('concernedPeople')}</a>
                               </Link>
                             </li>
                             <li>
                               <Link href="/financing" activeClassName="active">
-                                <a>
-                                  Ou chercher les financements pour mon voyage
-                                </a>
+                                <a>{t('financing')}</a>
                               </Link>
                             </li>
                           </ul>
                         </li>
                         <li>
-                          <a href="/destination">Destinations</a>
+                          <Link href="/destination" locale={locale}>
+                            <a>{t('destinations')}</a>
+                          </Link>
                           {/*
                           <span className="menu-expand">
                             <i className="las la-angle-down"></i>
@@ -345,7 +361,9 @@ const Navbar = () => {
                         </li>*/}
 
                         <li>
-                          <a href="/about-us">Qui sommes-nous</a>
+                          <Link href="/about-us" locale={locale}>
+                            <a>{t('aboutUs')}</a>
+                          </Link>
                           {/*
                           <span className="menu-expand">
                             <i className="las la-angle-down"></i>
@@ -452,7 +470,9 @@ const Navbar = () => {
                         </li>
 
                         <li>
-                          <a href="/contact-us">Nous contacter</a>
+                          <Link href="/contact-us" locale={locale}>
+                            <a>{t('contactUs')}</a>
+                          </Link>
                           {/*
                           <span className="menu-expand">
                             <i className="las la-angle-down"></i>
@@ -637,7 +657,7 @@ const Navbar = () => {
                     <div className="contact-box">
                       <span className="ri-phone-line"></span>
                       <p>
-                        Contacter maintenant
+                        {t('contactNow')}
                         <br />
                         <a href="tel:+33143156455">+331.43.15.64.55</a>
                       </p>
@@ -657,7 +677,7 @@ const Navbar = () => {
           className={displayContact ? 'contact-popup open' : 'contact-popup'}
         >
           <div className="contact-popup-title">
-            <h2>Nous contacter</h2>
+            <h2>{t('contactUs')}</h2>
             <button
               type="button"
               className="close-popup"
@@ -674,14 +694,14 @@ const Navbar = () => {
               </div>
               <div className="contact-info">
                 <h5>Paris, France</h5>
-                <p>Adresse: 03 rue Bisson 75020, Paris</p>
+                <p>{t('address')}: 03 rue Bisson 75020, Paris</p>
                 <p>
-                  Tel: <a href="tel:+33143156455">+331.43.15.64.55</a>
+                  {t('phone')}: <a href="tel:+33143156455">+331.43.15.64.55</a>
                 </p>
               </div>
 
               <div className="contact-info">
-                <h5 className="mtb-15">Suivez-nous sur:</h5>
+                <h5 className="mtb-15">{t('followUs')}:</h5>
 
                 <ul className="social-profile v1">
                   <li>
@@ -832,5 +852,4 @@ const Navbar = () => {
     </>
   )
 }
-
 export default Navbar

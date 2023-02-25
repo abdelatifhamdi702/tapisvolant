@@ -1,15 +1,28 @@
 import React from 'react'
-import Link from 'next/link'
-import PageBanner from '../components/common/PageBanner'
 import ContactForm from '../components/Contact/ContactForm'
 import PageBannerTwo from '../components/common/PageBannerTwo'
+import { useTranslation } from 'react-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        'navbar',
+        'footer',
+        'contactus',
+      ])),
+      // Will be passed to the page component as props
+    },
+  }
+}
 const ContactUs = () => {
+  const { t } = useTranslation('navbar')
   return (
     <>
       <PageBannerTwo
-        bannerTitle="Nous contacter"
-        pageName="Nous contacter"
+        bannerTitle={t('contactUs')}
+        pageName={t('contactUs')}
         bgImageCss="br-bg-2"
       />
 
@@ -22,7 +35,7 @@ const ContactUs = () => {
                   <i className="ri-map-pin-fill"></i>
                 </div>
                 <div className="contact-info">
-                  <h5>Adresse</h5>
+                  <h5>{t('address')}</h5>
                   <p className="mb-0">
                     03 rue Bisson 75020, Paris <br /> FRANCE
                   </p>
@@ -37,7 +50,8 @@ const ContactUs = () => {
                 <div className="contact-info">
                   <h5>Contact</h5>
                   <p className="mb-0">
-                    Tel: <a href="tel:+33143156455">+331.43.15.64.55</a>
+                    {t('phone')}:{' '}
+                    <a href="tel:+33143156455">+331.43.15.64.55</a>
                   </p>
 
                   <p className="mb-0">
@@ -56,7 +70,7 @@ const ContactUs = () => {
                   <i className="ri-map-pin-fill"></i>
                 </div>
                 <div className="contact-info">
-                  <h5 style={{ marginBottom: '25px' }}>Suivez-nous sur</h5>
+                  <h5 style={{ marginBottom: '25px' }}>{t('followUs')}</h5>
                   <ul className="social-profile v1">
                     <li>
                       <a target="_blank" href="https://facebook.com">
@@ -93,11 +107,11 @@ const ContactUs = () => {
             <div className="col-lg-12">
               <div className="comp_map style2">
                 <iframe
-                  class="gmap_iframe"
-                  frameborder="0"
+                  className="gmap_iframe"
+                  frameBorder="0"
                   scrolling="no"
-                  marginheight="0"
-                  marginwidth="0"
+                  marginHeight="0"
+                  marginWidth="0"
                   src="https://maps.google.com/maps?width=600&amp;height=400&amp;hl=en&amp;q=03 rue Bisson 75020, Paris&amp;t=&amp;z=14&amp;ie=UTF8&amp;iwloc=B&amp;output=embed"
                 ></iframe>
               </div>

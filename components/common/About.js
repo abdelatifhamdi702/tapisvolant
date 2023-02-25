@@ -2,6 +2,7 @@ import React from 'react'
 import { useState, useEffect } from 'react'
 import dynamic from 'next/dynamic'
 const OwlCarousel = dynamic(import('react-owl-carousel3'))
+import { useTranslation } from 'react-i18next'
 
 const options = {
   loop: true,
@@ -20,6 +21,7 @@ const options = {
 }
 
 const About = ({ bgColor, shape, featureStyle, ptb100 }) => {
+  const { t } = useTranslation('aboutus')
   const [display, setDisplay] = useState(false)
   const [isMounted, setisMounted] = useState(false)
 
@@ -48,63 +50,50 @@ const About = ({ bgColor, shape, featureStyle, ptb100 }) => {
             <div className="col-lg-12">
               <div className="section-title style6 sm-center mb-40">
                 <br />
-                <h2 style={{ textAlign: 'center' }}>Qui sommes-nous ?</h2>
+                <h2 style={{ textAlign: 'center' }}>{t('title')} ?</h2>
                 <p style={{ margin: '40px' }}>
                   <b style={{ fontSize: '16px', color: '#cc3f32' }}>
-                    Des spécialistes des voyages et séjours adaptés et de
-                    l’accompagnement
+                    {t('text1')}
                   </b>
-                  <br /> L’agence de voyage a été créée en 1992, spécialisée
-                  dans les voyages organisés, les séjours et la billetterie.
-                  Dans le cadre de notre stratégie de développement nous avons
-                  inclus en 2022 un volet de voyages adaptés organisés VAO pour
-                  permettre aux personnes en situation de handicap de voyager
-                  avec un accompagnement personnalisé
-                  <b style={{ color: '#cc3f32' }}>« prêt à embarquer ».</b>
+                  <br /> {t('text2')}
+                  <b style={{ color: '#cc3f32' }}> « {t('text3')} ».</b>
                   <br />
-                  Pour assurer le transport et les séjours adaptés nous mettons
-                  à disposition de notre clientèle une équipe professionnelle
-                  formée et expérimentée. Depuis la France et l’étranger, les
-                  vacanciers peuvent s’adresser à notre agence
-                  <b style={{ color: '#cc3f32' }}>TAPIS VOLANT</b> pour
-                  organiser leurs voyages et séjours adaptés.
+                  {t('text4')}
+                  <b style={{ color: '#cc3f32' }}> TAPIS VOLANT</b> {t('text5')}
                 </p>
               </div>
               <br />
               <div className="col-md-12">
                 <div className="section-title style4 text-center">
-                  <span>TOUTES NOS</span>
-                  <h2>OBJECTIFS</h2>
+                  <span>{t('allour')}</span>
+                  <h2>{t('objectives')}</h2>
                 </div>
               </div>
               <br />
               <div className="about-features">
                 <div className={`about-feature-item ${featureStyle}`}>
                   <div className="about-feature-text">
-                    <p>
-                      La lutte contre l’isolement des personnes en situation de
-                      handicap
-                    </p>
+                    <p>{t('o1')}</p>
                   </div>
                 </div>
                 <div className={`about-feature-item ${featureStyle}`}>
                   <div className="about-feature-text">
-                    <p>Maintenir l’autonomie au risque de perte</p>
+                    <p>{t('o2')}</p>
                   </div>
                 </div>
                 <div className={`about-feature-item ${featureStyle}`}>
                   <div className="about-feature-text">
-                    <p>Sensibiliser la société au handicap</p>
+                    <p>{t('o3')}</p>
                   </div>
                 </div>
                 <div className={`about-feature-item ${featureStyle}`}>
                   <div className="about-feature-text">
-                    <p>Répondre à une forte demande</p>
+                    <p>{t('o4')}</p>
                   </div>
                 </div>
                 <div className={`about-feature-item ${featureStyle}`}>
                   <div className="about-feature-text">
-                    <p>Redynamiser l’économie dans le secteur du touristique</p>
+                    <p>{t('o5')}</p>
                   </div>
                 </div>
               </div>

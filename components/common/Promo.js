@@ -1,6 +1,7 @@
 import React from 'react'
-
+import { useTranslation } from 'react-i18next'
 const Promo = ({ bgStyle, mt100 }) => {
+  const { t } = useTranslation('aboutus')
   return (
     <>
       <div className={`promo-wrap pt-100 pb-70 z-0 ${mt100}`}>
@@ -8,8 +9,8 @@ const Promo = ({ bgStyle, mt100 }) => {
           <div className="row mb-40 align-items-end">
             <div className="col-md-12">
               <div className="section-title style4 text-center">
-                <span>TOUTES NOS</span>
-                <h2>VALEURS</h2>
+                <span>{t('allour')}</span>
+                <h2>{t('values')}</h2>
               </div>
             </div>
           </div>
@@ -20,12 +21,8 @@ const Promo = ({ bgStyle, mt100 }) => {
                   <i className="la la-handshake"></i>
                 </div>
                 <div className="promo-content">
-                  <h4>ENGAGEMENT</h4>
-                  <p>
-                    une valeur fondatrice pour nos projets de séjours notamment
-                    dans la compréhension des besoins et des attentes de notre
-                    clientèle.
-                  </p>
+                  <h4>{t('t1')}</h4>
+                  <p>{t('v1')}</p>
                 </div>
               </div>
             </div>
@@ -35,12 +32,8 @@ const Promo = ({ bgStyle, mt100 }) => {
                   <i className="la la-check-circle"></i>
                 </div>
                 <div className="promo-content">
-                  <h4>QUALITE</h4>
-                  <p>
-                    nous sommes très exigeants envers nous-même ainsi que nos
-                    partenaires, notre réussite se mesure à la satisfaction de
-                    nos vacanciers.
-                  </p>
+                  <h4>{t('t2')}</h4>
+                  <p>{t('v2')}</p>
                 </div>
               </div>
             </div>
@@ -50,11 +43,8 @@ const Promo = ({ bgStyle, mt100 }) => {
                   <i className="la la-users"></i>
                 </div>
                 <div className="promo-content">
-                  <h4>INCLUSION</h4>
-                  <p>
-                    cette valeur guide chacune de nos pratiques vers une société
-                    inclusive, c’est aussi le respect des différences.
-                  </p>
+                  <h4>{t('t3')}</h4>
+                  <p>{t('v3')}</p>
                 </div>
               </div>
             </div>
@@ -64,12 +54,8 @@ const Promo = ({ bgStyle, mt100 }) => {
                   <i className="la la-gem"></i>
                 </div>
                 <div className="promo-content">
-                  <h4>BIEN-ETRE</h4>
-                  <p>
-                    notre culture est animée depuis la création de l’agence Par
-                    une éthique humaniste profonde qui met au cœur de ses
-                    projets le bien être de la personne.
-                  </p>
+                  <h4>{t('t4')}</h4>
+                  <p>{t('v4')}</p>
                 </div>
               </div>
             </div>

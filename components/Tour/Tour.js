@@ -1,5 +1,6 @@
 import React from 'react'
 import Link from 'next/link'
+import { useTranslation } from 'react-i18next'
 
 const Tour = ({
   id,
@@ -12,6 +13,8 @@ const Tour = ({
   imgURL,
 }) => {
   let detailHref = '/tour-details/' + id
+  const { t } = useTranslation('tourcomponent')
+
   return (
     <>
       <div className="col-xl-6 col-lg-12">
@@ -35,7 +38,7 @@ const Tour = ({
                 <div className="feature-tour-meta">
                   <div className="feature-tour-time">
                     <i className="ri-time-line"></i>
-                    {duration} jours
+                    {duration} {t('days')}
                   </div>
                   <div className="feature-tour-review">
                     <span className="rating">{rating}</span>
@@ -44,11 +47,13 @@ const Tour = ({
                   </div>
                 </div>
                 <p>{description}</p>
-                <span className="feature-tour-price">À partir de €{price}</span>
+                <span className="feature-tour-price">
+                  {t('from')} €{price}
+                </span>
                 <div className="feature-tour-option">
                   <Link href={detailHref}>
                     <a className="link style1">
-                      Détails de séjour{' '}
+                      {t('link')}
                       <i className="ri-logout-circle-r-line"></i>
                     </a>
                   </Link>

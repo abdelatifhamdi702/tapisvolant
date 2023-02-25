@@ -1,29 +1,35 @@
 import React, { useEffect, useState } from 'react'
-const search = () => {
-  var e = document.getElementById('destinationSelect')
-  var value = e.value
-  var e2 = document.getElementById('disSelect')
-  var text = e2.options[e2.selectedIndex].text
-  var keyword = document.getElementById('keyWord').value
-  document.location.href =
-    '/tours?' +
-    'search=' +
-    'true' +
-    '&destination=' +
-    value +
-    '&disability=' +
-    text +
-    '&keyword=' +
-    keyword
-}
+import { useTranslation } from 'react-i18next'
+import { useRouter } from 'next/router'
+
 const SearchTour = () => {
+  const { t } = useTranslation('tours')
+
   const [destinations, setDestinations] = useState([])
   const [disabilities, setDisabilities] = useState([])
-
+  var router = useRouter()
+  const { locale } = router
+  const search = () => {
+    var e = document.getElementById('destinationSelect')
+    var value = e.value
+    var e2 = document.getElementById('disSelect')
+    var text = e2.options[e2.selectedIndex].value
+    var keyword = document.getElementById('keyWord').value
+    document.location.href =
+      '/tours?' +
+      'search=' +
+      'true' +
+      '&destination=' +
+      value +
+      '&disability=' +
+      text +
+      '&keyword=' +
+      keyword
+  }
   useEffect(() => {
     const fetchDestinations = async () => {
       const response = await fetch(
-        `http://${process.env.host}:${process.env.port}/destination`
+        `http://${process.env.host}:${process.env.port}/destination?locale=${locale}`
       )
 
       /*if (!response.ok) {
@@ -53,7 +59,7 @@ const SearchTour = () => {
 
     const fetchDisabilities = async () => {
       const response = await fetch(
-        `http://${process.env.host}:${process.env.port}/disability/all`
+        `http://${process.env.host}:${process.env.port}/disability/all?locale=${locale}`
       )
 
       /*if (!response.ok) {
@@ -68,6 +74,7 @@ const SearchTour = () => {
         loadedDisabilities.push({
           id: responseData.data[key].id,
           type: responseData.data[key].type,
+          code: responseData.data[key].code,
         })
       }
       console.log(loadedDisabilities)
@@ -76,7 +83,7 @@ const SearchTour = () => {
     }
 
     fetchDisabilities()
-  }, [])
+  }, [locale])
   return (
     <>
       <div className="search-tour">
@@ -86,7 +93,7 @@ const SearchTour = () => {
               <div className="filter-tours-wrap style1 mt-30">
                 <div className="filter-box">
                   <div className="form-group">
-                    <input id="keyWord" type="search" placeholder="Mots clés" />
+                    <input id="keyWord" type="search" />
                     <button type="submit">
                       <i className="ri-search-line"></i>
                     </button>
@@ -110,7 +117,7 @@ const SearchTour = () => {
                   <div className="filter-dropdown">
                     <select id="disSelect" className="hero-filter">
                       {disabilities.map((item, index) => (
-                        <option key={item.id} value={item.type}>
+                        <option key={item.id} value={item.code}>
                           {item.type}
                         </option>
                       ))}
@@ -122,7 +129,7 @@ const SearchTour = () => {
                 </div>
                 <div className="filter-box">
                   <button onClick={search} className="search-btn">
-                    Rechercher <i className="ri-logout-circle-r-line"></i>
+                    {t('btn')} <i className="ri-logout-circle-r-line"></i>
                   </button>
                 </div>
               </div>

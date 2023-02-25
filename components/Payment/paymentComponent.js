@@ -12,8 +12,11 @@ import {
 import Swal from 'sweetalert2'
 
 import { loadStripe } from '@stripe/stripe-js'
+import { useTranslation } from 'react-i18next'
 
 const PaymentComponent = ({ price }) => {
+  const { t } = useTranslation('payment')
+
   const [isProcessing, setIsProcessing] = useState(false)
   const [paymentStatus, setPaymentStatus] = useState('')
   const stripe = useStripe()
@@ -95,14 +98,14 @@ const PaymentComponent = ({ price }) => {
   return (
     <>
       <form className="payment-form" onSubmit={handleSubmit} id="payment-form">
-        <h5>Remplissez les informations de votre carte et payez maintenant</h5>
+        <h5>{t('title')}</h5>
         <br />
         <CardElement options={{ style: STYLE }}></CardElement>
         {isProcessing && <div className="spinner" id="spinner"></div>}
         <br />
         {!isProcessing && (
           <button className="payment-btn" id="submit">
-            Payez maintenant
+            {t('btn')}
             <i
               style={{
                 marginTop: '5px',
@@ -117,7 +120,9 @@ const PaymentComponent = ({ price }) => {
           <p class={'result-message'}>
             {paymentStatus} ,
             <a href="" target="_blank">
-              {paymentStatus == 'Payment failed!' ? 'Oops!' : 'thanks'}
+              {paymentStatus == 'Payment failed!'
+                ? t('errormessage')
+                : t('successmessage')}
             </a>
           </p>
         )}

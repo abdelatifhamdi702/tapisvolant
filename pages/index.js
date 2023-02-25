@@ -1,15 +1,29 @@
 import React from 'react'
 import Banner from '../components/HomeTwo/Banner'
 import Promo from '../components/common/Promo'
-import TourSlider from '../components/HomeTwo/TourSlider'
-import BestTour from '../components/common/BestTour'
-import AdventureTour from '../components/common/AdventureTour'
 import Service from '../components/common/Service'
 import RecommendTour from '../components/common/RecommendTour'
 import FeatureTour from '../components/common/FeatureTour'
 import About from '../components/common/About'
+import { useTranslation } from 'react-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
+export async function getStaticProps({ locale }) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, [
+        'navbar',
+        'footer',
+        'index',
+        'aboutus',
+        'tourcomponent',
+      ])),
+      // Will be passed to the page component as props
+    },
+  }
+}
 const Index2 = () => {
+  const { t } = useTranslation('index')
   return (
     <>
       <Banner />
@@ -18,19 +32,9 @@ const Index2 = () => {
 
       <Promo bgStyle="style2" />
 
-      {/*<TourSlider />
-
-      <BestTour 
-        cardStyle='style2' 
-        shape={false} 
-  />
-
-      <AdventureTour radiusStyle="style4" />
-*/}
-
       <RecommendTour
-        title="TOUTES NOS"
-        subTitle="DESTINATIONS RECOMMANDEES"
+        title={t('destinationtitle')}
+        subTitle={t('destinationsubtitle')}
         bgStyle="bg-heath"
       />
 
@@ -38,8 +42,8 @@ const Index2 = () => {
         <div className="row mb-40 align-items-end">
           <div className="col-md-12">
             <div className="section-title style4 text-center">
-              <span>TOUS NOS</span>
-              <h2>SEJOURS DISPONIBLES</h2>
+              <span>{t('tourtitle')}</span>
+              <h2>{t('toursubtitle')}</h2>
             </div>
           </div>
         </div>
@@ -47,12 +51,6 @@ const Index2 = () => {
       </div>
 
       <Service />
-
-      {/*<Product />
-
-      <Blog blogStyle="style2" />
-
-<Newsletter inputStyle="style2" shape={false} />*/}
     </>
   )
 }

@@ -1,6 +1,7 @@
 import Link from 'next/link'
-
+import { useTranslation } from 'react-i18next'
 const Service = () => {
+  const { t } = useTranslation('aboutus')
   return (
     <>
       <section className="service-wrap pt-100 pb-100">
@@ -8,8 +9,8 @@ const Service = () => {
           <div className="row mb-40 align-items-end">
             <div className="col-md-12">
               <div className="section-title style4 text-center">
-                <span>TOUS NOS</span>
-                <h2>PARTENAIRES</h2>
+                <span>{t('allour2')}</span>
+                <h2>{t('partners')}</h2>
               </div>
             </div>
           </div>
@@ -26,7 +27,7 @@ const Service = () => {
                 <div className="service-info">
                   <h4>
                     <Link href="#">
-                      <a>Les compagnies de transports (avions, trains…)</a>
+                      <a>{t('p1')}</a>
                     </Link>
                   </h4>
                 </div>
@@ -44,7 +45,7 @@ const Service = () => {
                 <div className="service-info">
                   <h4>
                     <Link href="#">
-                      <a>Hébergement (hôtels, gites, villages de vacances…)</a>
+                      <a>{t('p2')}</a>
                     </Link>
                   </h4>
                 </div>
@@ -62,9 +63,7 @@ const Service = () => {
                 <div className="service-info">
                   <h4>
                     <Link href="#">
-                      <a>
-                        Les centres de soins (cabinets médicaux, infirmeries…)
-                      </a>
+                      <a>{t('p3')}</a>
                     </Link>
                   </h4>
                 </div>
@@ -82,7 +81,7 @@ const Service = () => {
                 <div className="service-info">
                   <h4>
                     <Link href="#">
-                      <a>Les centres d’activités culturelles et de loisirs</a>
+                      <a>{t('p4')}</a>
                     </Link>
                   </h4>
                 </div>
@@ -100,7 +99,7 @@ const Service = () => {
                 <div className="service-info">
                   <h4>
                     <Link href="#">
-                      <a>Les agences d’intérim/ services à la personne</a>
+                      <a>{t('p5')}</a>
                     </Link>
                   </h4>
                 </div>
@@ -118,7 +117,7 @@ const Service = () => {
                 <div className="service-info">
                   <h4>
                     <Link href="#">
-                      <a>Les restaurants</a>
+                      <a>{t('p6')}</a>
                     </Link>
                   </h4>
                 </div>

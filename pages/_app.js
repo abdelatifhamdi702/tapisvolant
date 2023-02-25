@@ -20,6 +20,7 @@ import '../public/css/page-css/payment.css'
 import Layout from '../components/Layout/Layout'
 import Loader from '../components/Shared/Loader'
 import GoTop from '../components/Shared/GoTop'
+import { appWithTranslation } from 'next-i18next'
 
 function MyApp({ Component, pageProps }) {
   const [loading, setLoading] = useState(true)
@@ -36,5 +37,4 @@ function MyApp({ Component, pageProps }) {
     </Layout>
   )
 }
-
-export default MyApp
+export default appWithTranslation(MyApp)
