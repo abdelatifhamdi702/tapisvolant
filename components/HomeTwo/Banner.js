@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import TourSlider from '../Tour/TourSlider'
 import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 
@@ -91,13 +92,15 @@ const Banner = () => {
       <div className="hero-wrap style2">
         <div className="container-fluid">
           <div className="row">
-            <div className="col-xl-7 col-lg-8">
+            <div className="col-xl-12 col-lg-12">
               <div className="hero-content style2 text-left">
                 <h1>
                   {t('bannertitle1')}
                   <br />
                   <span>{t('bannertitle2')}</span>
                 </h1>
+                <TourSlider />
+
                 <div className="filter-tours-wrap style2">
                   <div className="filter-box">
                     <div className="form-group">

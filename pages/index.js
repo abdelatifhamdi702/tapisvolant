@@ -27,7 +27,6 @@ const Index2 = () => {
   return (
     <>
       <Banner />
-
       <About featureStyle="style2" />
 
       <Promo bgStyle="style2" />

@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next'
 import { useRouter } from 'next/router'
 var token = ''
 var email = ''
-const { t } = useTranslation('reset')
 const ResetPasswordArea = () => {
   var router = useRouter()
+  const { t } = useTranslation('reset')
   email = router.query['email']
   token = router.query['token']
 
