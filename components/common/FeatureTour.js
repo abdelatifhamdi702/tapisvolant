@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import Tour from '../Tour/tour'
+import Tour from '../Tour/Tour'
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 
@@ -37,7 +37,7 @@ const FeatureTour = ({ viewButton }) => {
             totalReview: responseData.data[key].totalReview,
             description: responseData.data[key].description,
             price: responseData.data[key].price,
-            imgURL: '' + correctPath,
+            imgURL: '' + correctPath
           })
         }
         console.log(loadedTours)
@@ -67,7 +67,7 @@ const FeatureTour = ({ viewButton }) => {
             totalReview: responseData.data[key].totalReview,
             description: responseData.data[key].description,
             price: responseData.data[key].price,
-            imgURL: '' + correctPath,
+            imgURL: '' + correctPath
           })
         }
         console.log(loadedTours)

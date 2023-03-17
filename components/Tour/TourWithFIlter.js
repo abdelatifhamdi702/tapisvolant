@@ -1,5 +1,5 @@
 import React from 'react'
-import Tour from './tour'
+import Tour from './Tour'
 import FeatureTour from '../common/FeatureTour'
 const TourWithFIlter = () => {
   return (
