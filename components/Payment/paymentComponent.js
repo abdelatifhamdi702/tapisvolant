@@ -7,7 +7,7 @@ import {
   CardElement,
   Elements,
   useElements,
-  useStripe,
+  useStripe
 } from '@stripe/react-stripe-js'
 import Swal from 'sweetalert2'
 
@@ -37,19 +37,19 @@ const PaymentComponent = ({ price }) => {
       let accessToken = await getAccessToken()
       const headersList = {
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + accessToken,
+        Authorization: 'Bearer ' + accessToken
       }
 
       const bodyContent = JSON.stringify({
-        price,
+        price
       })
 
       const res = await fetch(
-        `http://${process.env.host}:${process.env.port}/payment/pay`,
+        `https://${process.env.host}:${process.env.port}/payment/pay`,
         {
           method: 'POST',
           body: bodyContent,
-          headers: headersList,
+          headers: headersList
         }
       )
       const jsonRes = await res.json()
@@ -60,8 +60,8 @@ const PaymentComponent = ({ price }) => {
 
       const { paymentIntent } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
-          card: cardEl,
-        },
+          card: cardEl
+        }
       })
 
       if (!paymentIntent) {
@@ -85,14 +85,14 @@ const PaymentComponent = ({ price }) => {
       fontSmoothing: 'antialiased',
       fontSize: '16px',
       '::placeholder': {
-        color: '#32325d',
-      },
+        color: '#32325d'
+      }
     },
     invalid: {
       fontFamily: 'Arial, sans-serif',
       color: '#fa755a',
-      iconColor: '#fa755a',
-    },
+      iconColor: '#fa755a'
+    }
   }
 
   return (
@@ -109,7 +109,7 @@ const PaymentComponent = ({ price }) => {
             <i
               style={{
                 marginTop: '5px',
-                marginLeft: '5px',
+                marginLeft: '5px'
               }}
               className="ri-logout-circle-r-line"
             ></i>

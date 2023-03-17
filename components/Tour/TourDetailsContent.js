@@ -7,11 +7,11 @@ import { useTranslation } from 'react-i18next'
 
 async function getAccessToken() {
   let headersList = {
-    authorization: 'Bearer ' + localStorage.getItem('refreshToken'),
+    authorization: 'Bearer ' + localStorage.getItem('refreshToken')
   }
 
   const res6 = await fetch(`http://localhost:3000/refresh/token`, {
-    headers: headersList,
+    headers: headersList
   })
   let response6 = await res6.json()
 
@@ -46,19 +46,19 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
         icon: 'error',
         title: t('errormessage'),
         showConfirmButton: false,
-        timer: 1500,
+        timer: 1500
       })
     }
     let accessToken = await getAccessToken()
     let headersList = {
       authorization: 'Bearer ' + accessToken,
       'Content-Type': 'application/json',
-      'Cross-Origin-Resource-Policy': 'cross-origin',
+      'Cross-Origin-Resource-Policy': 'cross-origin'
     }
     let bodyContent = JSON.stringify({
       tourId: tour.id,
       rating: rating,
-      content: document.getElementById('review-msg').value,
+      content: document.getElementById('review-msg').value
     })
     let totalReview = parseInt(tour.totalReview) + 1
     let newRating =
@@ -67,25 +67,25 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
     let bodyContentTour = JSON.stringify({
       id: tour.id,
       rating: newRating,
-      totalReview: totalReview,
+      totalReview: totalReview
     })
     let response2 = await fetch(
-      `http://${process.env.host}:${process.env.port}/tour`,
+      `https://${process.env.host}:${process.env.port}/tour`,
       {
         method: 'PATCH',
         body: bodyContentTour,
-        headers: headersList,
+        headers: headersList
       }
     )
 
     const res2 = await response2.json()
     console.log(res2)
     let response = await fetch(
-      `http://${process.env.host}:${process.env.port}/comment`,
+      `https://${process.env.host}:${process.env.port}/comment`,
       {
         method: 'POST',
         headers: headersList,
-        body: bodyContent,
+        body: bodyContent
       }
     )
     return await response.json()
@@ -101,7 +101,7 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
         icon: 'success',
         title: t('commentsuccessmessage'),
         showConfirmButton: false,
-        timer: 1500,
+        timer: 1500
       })
     }
   }
@@ -109,7 +109,7 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
   const uploadBooking = async () => {
     let accessToken = await getAccessToken()
     let headersList = {
-      authorization: 'Bearer ' + accessToken,
+      authorization: 'Bearer ' + accessToken
     }
     let formData = new FormData()
 
@@ -117,11 +117,11 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
     formData.append('tourId', tour.id)
 
     let response = await fetch(
-      `http://${process.env.host}:${process.env.port}/upload/booking`,
+      `https://${process.env.host}:${process.env.port}/upload/booking`,
       {
         method: 'POST',
         headers: headersList,
-        body: formData,
+        body: formData
       }
     )
 
@@ -140,7 +140,7 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
         icon: 'success',
         title: t('bookingsuccessmessage'),
         showConfirmButton: false,
-        timer: 1500,
+        timer: 1500
       })
     }
     if (res.statusCode == 403) {
@@ -149,7 +149,7 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
         icon: 'error',
         title: t('errormessage2'),
         showConfirmButton: false,
-        timer: 1500,
+        timer: 1500
       })
     }
   }
@@ -161,25 +161,25 @@ const TourDetailsContent = ({ activities, tour, comments }) => {
         icon: 'error',
         title: t('errormessage'),
         showConfirmButton: false,
-        timer: 1500,
+        timer: 1500
       })
     }
     let accessToken = await getAccessToken()
     let headersList = {
       authorization: 'Bearer ' + accessToken,
       'Content-Type': 'application/json',
-      'Cross-Origin-Resource-Policy': 'cross-origin',
+      'Cross-Origin-Resource-Policy': 'cross-origin'
     }
     let bodyContent = JSON.stringify({
       tourId: tour.id,
-      status: 'En attendant',
+      status: 'En attendant'
     })
     let response = await fetch(
-      `http://${process.env.host}:${process.env.port}/booking`,
+      `https://${process.env.host}:${process.env.port}/booking`,
       {
         method: 'POST',
         headers: headersList,
-        body: bodyContent,
+        body: bodyContent
       }
     )
     return await response.json()
@@ -326,19 +326,19 @@ TourDetailsContent.defaultProps = {
     {
       question: 'What languages do you offer tours in?',
       answer:
-        'Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. Conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        'Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. Conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
     },
     {
       question: 'Are there any extra fees I have to pay?',
       answer:
-        'Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. Conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
+        'Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. Conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
     },
     {
       question: 'How much does it cost to do a private tour?',
       answer:
-        'Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. Conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-    },
-  ],
+        'Lorem ipsum dolor sit amet conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip. Conse ctetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+    }
+  ]
 }
 
 export default TourDetailsContent

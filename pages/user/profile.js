@@ -11,19 +11,19 @@ export async function getStaticProps({ locale }) {
         'footer',
         'profiledata',
         'editprofile',
-        'myaccount',
-      ])),
+        'myaccount'
+      ]))
       // Will be passed to the page component as props
-    },
+    }
   }
 }
 async function getAccessToken() {
   let headersList = {
-    authorization: 'Bearer ' + localStorage.getItem('refreshToken'),
+    authorization: 'Bearer ' + localStorage.getItem('refreshToken')
   }
 
   const res6 = await fetch(`http://localhost:3000/refresh/token`, {
-    headers: headersList,
+    headers: headersList
   })
   let response6 = await res6.json()
 
@@ -32,13 +32,13 @@ async function getAccessToken() {
 const authData = async () => {
   let accessToken = await getAccessToken()
   let headersList = {
-    authorization: 'Bearer ' + accessToken,
+    authorization: 'Bearer ' + accessToken
   }
 
   let response = await fetch(
-    `http://${process.env.host}:${process.env.port}/auth/me`,
+    `https://${process.env.host}:${process.env.port}/auth/me`,
     {
-      headers: headersList,
+      headers: headersList
     }
   )
 
@@ -48,13 +48,13 @@ const authData = async () => {
 const profileData = async () => {
   let accessToken = await getAccessToken()
   let headersList = {
-    authorization: 'Bearer ' + accessToken,
+    authorization: 'Bearer ' + accessToken
   }
 
   let response = await fetch(
-    `http://${process.env.host}:${process.env.port}/profile`,
+    `https://${process.env.host}:${process.env.port}/profile`,
     {
-      headers: headersList,
+      headers: headersList
     }
   )
 

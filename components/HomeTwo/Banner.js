@@ -32,7 +32,7 @@ const Banner = () => {
   useEffect(() => {
     const fetchDestinations = async () => {
       const response = await fetch(
-        `http://${process.env.host}:${process.env.port}/destination?locale=${locale}`
+        `https://${process.env.host}:${process.env.port}/destination?locale=${locale}`
       )
 
       /*if (!response.ok) {
@@ -50,7 +50,7 @@ const Banner = () => {
         loadedDestinations.push({
           id: responseData.data[key].id,
           title: responseData.data[key].city,
-          imgURL: '' + correctPath,
+          imgURL: '' + correctPath
         })
       }
       console.log(loadedDestinations)
@@ -62,7 +62,7 @@ const Banner = () => {
 
     const fetchDisabilities = async () => {
       const response = await fetch(
-        `http://${process.env.host}:${process.env.port}/disability/all?locale=${locale}`
+        `https://${process.env.host}:${process.env.port}/disability/all?locale=${locale}`
       )
 
       /*if (!response.ok) {
@@ -77,7 +77,7 @@ const Banner = () => {
         loadedDisabilities.push({
           id: responseData.data[key].id,
           type: responseData.data[key].type,
-          code: responseData.data[key].code,
+          code: responseData.data[key].code
         })
       }
       console.log(loadedDisabilities)

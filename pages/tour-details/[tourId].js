@@ -11,10 +11,10 @@ export async function getServerSideProps({ locale }) {
       ...(await serverSideTranslations(locale, [
         'navbar',
         'footer',
-        'tourdetails',
-      ])),
+        'tourdetails'
+      ]))
       // Will be passed to the page component as props
-    },
+    }
   }
 }
 const TourDetails = () => {
@@ -37,7 +37,7 @@ const TourDetails = () => {
     }
     const fetchTour = async () => {
       const response = await fetch(
-        `http://${process.env.host}:${process.env.port}/tour/one/${id}/?locale=${locale}`
+        `https://${process.env.host}:${process.env.port}/tour/one/${id}/?locale=${locale}`
       )
 
       const responseData = await response.json()
@@ -56,7 +56,7 @@ const TourDetails = () => {
           id: responseData.data.Activities[key].id,
           title: responseData.data.Activities[key].title,
           description: responseData.data.Activities[key].description,
-          imgURL: 'http://' + correctPath,
+          imgURL: 'http://' + correctPath
         })
       }
       for (const key in responseData.data.Comments) {
@@ -67,7 +67,7 @@ const TourDetails = () => {
           content: responseData.data.Comments[key].content,
           rating: responseData.data.Comments[key].rating,
           username: responseData.data.Comments[key].Auth.username,
-          profileImg: 'http://' + correctPath,
+          profileImg: 'http://' + correctPath
         })
       }
 

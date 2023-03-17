@@ -7,19 +7,19 @@ const LoginArea = () => {
   const login = async () => {
     let headersList = {
       'Content-Type': 'application/json',
-      'Cross-Origin-Resource-Policy': 'cross-origin',
+      'Cross-Origin-Resource-Policy': 'cross-origin'
     }
     let bodyContent = JSON.stringify({
       email: document.getElementById('email').value,
-      password: document.getElementById('pwd').value,
+      password: document.getElementById('pwd').value
     })
 
     let response = await fetch(
-      `http://${process.env.host}:${process.env.port}/auth/signin`,
+      `https://${process.env.host}:${process.env.port}/auth/signin`,
       {
         method: 'POST',
         headers: headersList,
-        body: bodyContent,
+        body: bodyContent
       }
     )
 

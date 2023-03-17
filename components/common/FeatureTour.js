@@ -14,7 +14,7 @@ const FeatureTour = ({ viewButton }) => {
   useEffect(() => {
     const fetchTours = async (url) => {
       if (router && router.query && router.query.search) {
-        url = `http://${process.env.host}:${process.env.port}/tour/search/?destinationId=${destination}&disability=${disability}&title=${keyword}&locale=${locale}`
+        url = `https://${process.env.host}:${process.env.port}/tour/search/?destinationId=${destination}&disability=${disability}&title=${keyword}&locale=${locale}`
         const response = await fetch(url)
 
         /*if (!response.ok) {
@@ -44,7 +44,7 @@ const FeatureTour = ({ viewButton }) => {
 
         setTours(loadedTours)
       } else {
-        url = `http://${process.env.host}:${process.env.port}/tour/all/?locale=${locale}`
+        url = `https://${process.env.host}:${process.env.port}/tour/all/?locale=${locale}`
         const response = await fetch(url)
 
         /*if (!response.ok) {

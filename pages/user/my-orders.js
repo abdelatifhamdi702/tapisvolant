@@ -13,19 +13,19 @@ export async function getStaticProps({ locale }) {
         'navbar',
         'footer',
         'mybookings',
-        'myaccount',
-      ])),
+        'myaccount'
+      ]))
       // Will be passed to the page component as props
-    },
+    }
   }
 }
 async function getAccessToken() {
   let headersList = {
-    authorization: 'Bearer ' + localStorage.getItem('refreshToken'),
+    authorization: 'Bearer ' + localStorage.getItem('refreshToken')
   }
 
   const res6 = await fetch(`http://localhost:3000/refresh/token`, {
-    headers: headersList,
+    headers: headersList
   })
   let response6 = await res6.json()
 
@@ -41,12 +41,12 @@ const MyOrders = () => {
     const fetchBookings = async () => {
       let accessToken = await getAccessToken()
       let headersList = {
-        authorization: 'Bearer ' + accessToken,
+        authorization: 'Bearer ' + accessToken
       }
       const response = await fetch(
-        `http://${process.env.host}:${process.env.port}/booking/my?locale=${locale}`,
+        `https://${process.env.host}:${process.env.port}/booking/my?locale=${locale}`,
         {
-          headers: headersList,
+          headers: headersList
         }
       )
 
@@ -69,7 +69,7 @@ const MyOrders = () => {
           price: responseData.data[key].Tour.price,
           status: t(responseData.data[key].status),
           imgURL: correctPath,
-          date: date,
+          date: date
         })
       }
       console.log(loadedBookings)

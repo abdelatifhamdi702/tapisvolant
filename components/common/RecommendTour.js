@@ -10,7 +10,7 @@ const RecommendTour = ({ title, subTitle, bgStyle }) => {
   useEffect(() => {
     const fetchDestinations = async () => {
       const response = await fetch(
-        `http://${process.env.host}:${process.env.port}/destination?locale=${locale}`
+        `https://${process.env.host}:${process.env.port}/destination?locale=${locale}`
       )
 
       /*if (!response.ok) {
@@ -28,7 +28,7 @@ const RecommendTour = ({ title, subTitle, bgStyle }) => {
         loadedDestinations.push({
           id: responseData.data[key].id,
           title: responseData.data[key].city,
-          imgURL: '' + correctPath,
+          imgURL: '' + correctPath
         })
       }
       console.log(loadedDestinations)

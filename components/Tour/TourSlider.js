@@ -10,33 +10,33 @@ const options = {
   slidesPerView: 1,
   autoplay: {
     delay: 3000,
-    disableOnInteraction: false,
+    disableOnInteraction: false
   },
   speed: 1500,
   loop: true,
   autoHeight: true,
   pagination: {
-    type: 'progressbar',
+    type: 'progressbar'
   },
 
   breakpoints: {
     0: {
       slidesPerView: 1,
-      spaceBetween: 0,
+      spaceBetween: 0
     },
     768: {
       slidesPerView: 1,
-      spaceBetween: 0,
+      spaceBetween: 0
     },
     992: {
       slidesPerView: 1,
-      spaceBetween: 0,
+      spaceBetween: 0
     },
     1200: {
       slidesPerView: 1,
-      spaceBetween: 0,
-    },
-  },
+      spaceBetween: 0
+    }
+  }
 }
 
 // import Swiper core and required modules
@@ -56,7 +56,7 @@ const TourSlider = () => {
   useEffect(() => {
     const fetchTours = async (url) => {
       if (router && router.query && router.query.search) {
-        url = `http://${process.env.host}:${process.env.port}/tour/search/?destinationId=${destination}&disability=${disability}&title=${keyword}&locale=${locale}`
+        url = `https://${process.env.host}:${process.env.port}/tour/search/?destinationId=${destination}&disability=${disability}&title=${keyword}&locale=${locale}`
         const response = await fetch(url)
 
         /*if (!response.ok) {
@@ -79,14 +79,14 @@ const TourSlider = () => {
             totalReview: responseData.data[key].totalReview,
             description: responseData.data[key].description,
             price: responseData.data[key].price,
-            imgURL: '' + correctPath,
+            imgURL: '' + correctPath
           })
         }
         console.log(loadedTours)
 
         setTours(loadedTours)
       } else {
-        url = `http://${process.env.host}:${process.env.port}/tour/all/?locale=${locale}`
+        url = `https://${process.env.host}:${process.env.port}/tour/all/?locale=${locale}`
         const response = await fetch(url)
 
         /*if (!response.ok) {
@@ -109,7 +109,7 @@ const TourSlider = () => {
             totalReview: responseData.data[key].totalReview,
             description: responseData.data[key].description,
             price: responseData.data[key].price,
-            coverImgUrl: '' + correctPath,
+            coverImgUrl: '' + correctPath
           })
         }
         console.log(loadedTours)

@@ -7,19 +7,19 @@ const ForgotPasswordArea = () => {
   const reset = async () => {
     let email = document.getElementById('email').value
     let headersList = {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
       //'Cross-Origin-Resource-Policy': 'cross-origin',
     }
     let bodyContent = JSON.stringify({
-      email: email,
+      email: email
     })
 
     let response = await fetch(
-      `http://${process.env.host}:${process.env.port}/reset/password`,
+      `https://${process.env.host}:${process.env.port}/reset/password`,
       {
         method: 'POST',
         headers: headersList,
-        body: bodyContent,
+        body: bodyContent
       }
     )
 
@@ -35,7 +35,7 @@ const ForgotPasswordArea = () => {
         icon: 'success',
         title: t('message'),
         showConfirmButton: false,
-        timer: 1500,
+        timer: 1500
       })
     }
   }

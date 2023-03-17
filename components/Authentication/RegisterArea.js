@@ -34,7 +34,7 @@ const RegisterArea = () => {
       let error = t('passworderror')
       document.getElementById('pwdError').innerHTML = error
       return {
-        error: error,
+        error: error
       }
     } else document.getElementById('pwdError').innerHTML = ''
 
@@ -42,27 +42,27 @@ const RegisterArea = () => {
       let error = t('phoneerror') + ' : (+33143156455)'
       document.getElementById('phoneError').innerHTML = error
       return {
-        error: error,
+        error: error
       }
     } else document.getElementById('phoneError').innerHTML = ''
 
     let headersList = {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
       //'Cross-Origin-Resource-Policy': 'cross-origin',
     }
     let bodyContent = JSON.stringify({
       email: email,
       password: pwd,
       username: username,
-      phone: phone,
+      phone: phone
     })
 
     let response = await fetch(
-      `http://${process.env.host}:${process.env.port}/auth/signup`,
+      `https://${process.env.host}:${process.env.port}/auth/signup`,
       {
         method: 'POST',
         headers: headersList,
-        body: bodyContent,
+        body: bodyContent
       }
     )
 
@@ -70,11 +70,11 @@ const RegisterArea = () => {
   }
   async function getAccessToken() {
     let headersList = {
-      authorization: 'Bearer ' + localStorage.getItem('refreshToken'),
+      authorization: 'Bearer ' + localStorage.getItem('refreshToken')
     }
 
     const res6 = await fetch(`http://localhost:3000/refresh/token`, {
-      headers: headersList,
+      headers: headersList
     })
     let response6 = await res6.json()
 
@@ -86,20 +86,20 @@ const RegisterArea = () => {
     let headersList = {
       authorization: 'Bearer ' + accessToken,
       'Content-Type': 'application/json',
-      'Cross-Origin-Resource-Policy': 'cross-origin',
+      'Cross-Origin-Resource-Policy': 'cross-origin'
     }
     let bodyContent = JSON.stringify({
       age: 45,
       Addresses: [{ address: '.' }, { address: '.' }],
-      DisabilityCategories: [],
+      DisabilityCategories: []
     })
 
     let response = await fetch(
-      `http://${process.env.host}:${process.env.port}/profile`,
+      `https://${process.env.host}:${process.env.port}/profile`,
       {
         method: 'POST',
         headers: headersList,
-        body: bodyContent,
+        body: bodyContent
       }
     )
     return await response.json()

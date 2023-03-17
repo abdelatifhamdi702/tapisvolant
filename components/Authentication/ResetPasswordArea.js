@@ -29,30 +29,30 @@ const ResetPasswordArea = () => {
         icon: 'error',
         title: error,
         showConfirmButton: false,
-        timer: 1500,
+        timer: 1500
       })
 
       return {
-        error: error,
+        error: error
       }
     }
     let headersList = {
       authorization: 'Bearer ' + token,
       'Content-Type': 'application/json',
-      'Cross-Origin-Resource-Policy': 'cross-origin',
+      'Cross-Origin-Resource-Policy': 'cross-origin'
     }
     let bodyContent = JSON.stringify({
       token: token,
       password: password,
-      email: email,
+      email: email
     })
 
     let response = await fetch(
-      `http://${process.env.host}:${process.env.port}/reset/password`,
+      `https://${process.env.host}:${process.env.port}/reset/password`,
       {
         method: 'PATCH',
         headers: headersList,
-        body: bodyContent,
+        body: bodyContent
       }
     )
 
@@ -68,7 +68,7 @@ const ResetPasswordArea = () => {
         icon: 'success',
         title: t('success'),
         showConfirmButton: false,
-        timer: 1500,
+        timer: 1500
       })
     }
   }

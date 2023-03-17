@@ -29,7 +29,7 @@ const SearchTour = () => {
   useEffect(() => {
     const fetchDestinations = async () => {
       const response = await fetch(
-        `http://${process.env.host}:${process.env.port}/destination?locale=${locale}`
+        `https://${process.env.host}:${process.env.port}/destination?locale=${locale}`
       )
 
       /*if (!response.ok) {
@@ -47,7 +47,7 @@ const SearchTour = () => {
         loadedDestinations.push({
           id: responseData.data[key].id,
           title: responseData.data[key].city,
-          imgURL: '' + correctPath,
+          imgURL: '' + correctPath
         })
       }
       console.log(loadedDestinations)
@@ -59,7 +59,7 @@ const SearchTour = () => {
 
     const fetchDisabilities = async () => {
       const response = await fetch(
-        `http://${process.env.host}:${process.env.port}/disability/all?locale=${locale}`
+        `https://${process.env.host}:${process.env.port}/disability/all?locale=${locale}`
       )
 
       /*if (!response.ok) {
@@ -74,7 +74,7 @@ const SearchTour = () => {
         loadedDisabilities.push({
           id: responseData.data[key].id,
           type: responseData.data[key].type,
-          code: responseData.data[key].code,
+          code: responseData.data[key].code
         })
       }
       console.log(loadedDisabilities)

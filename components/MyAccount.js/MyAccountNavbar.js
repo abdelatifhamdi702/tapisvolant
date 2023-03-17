@@ -4,11 +4,11 @@ import { useTranslation } from 'react-i18next'
 
 async function getAccessToken() {
   let headersList = {
-    authorization: 'Bearer ' + localStorage.getItem('refreshToken'),
+    authorization: 'Bearer ' + localStorage.getItem('refreshToken')
   }
 
   const res6 = await fetch(`http://localhost:3000/refresh/token`, {
-    headers: headersList,
+    headers: headersList
   })
   let response6 = await res6.json()
 
@@ -17,14 +17,14 @@ async function getAccessToken() {
 const logoutReq = async () => {
   let accessToken = await getAccessToken()
   let headersList = {
-    authorization: 'Bearer ' + accessToken,
+    authorization: 'Bearer ' + accessToken
   }
 
   let response = await fetch(
-    `http://${process.env.host}:${process.env.port}/auth/logout`,
+    `https://${process.env.host}:${process.env.port}/auth/logout`,
     {
       method: 'POST',
-      headers: headersList,
+      headers: headersList
     }
   )
 

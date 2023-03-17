@@ -13,19 +13,19 @@ export async function getStaticProps({ locale }) {
         'navbar',
         'footer',
         'editprofile',
-        'myaccount',
-      ])),
+        'myaccount'
+      ]))
       // Will be passed to the page component as props
-    },
+    }
   }
 }
 async function getAccessToken() {
   let headersList = {
-    authorization: 'Bearer ' + localStorage.getItem('refreshToken'),
+    authorization: 'Bearer ' + localStorage.getItem('refreshToken')
   }
 
   const res6 = await fetch(`http://localhost:3000/refresh/token`, {
-    headers: headersList,
+    headers: headersList
   })
   let response6 = await res6.json()
   return response6.data.accessToken
@@ -38,13 +38,13 @@ const EditProfile = () => {
   const authData = async () => {
     let accessToken = await getAccessToken()
     let headersList = {
-      authorization: 'Bearer ' + accessToken,
+      authorization: 'Bearer ' + accessToken
     }
 
     let response = await fetch(
-      `http://${process.env.host}:${process.env.port}/auth/me`,
+      `https://${process.env.host}:${process.env.port}/auth/me`,
       {
-        headers: headersList,
+        headers: headersList
       }
     )
 
@@ -54,13 +54,13 @@ const EditProfile = () => {
   const profileData = async () => {
     let accessToken = await getAccessToken()
     let headersList = {
-      authorization: 'Bearer ' + accessToken,
+      authorization: 'Bearer ' + accessToken
     }
 
     let response = await fetch(
-      `http://${process.env.host}:${process.env.port}/profile`,
+      `https://${process.env.host}:${process.env.port}/profile`,
       {
-        headers: headersList,
+        headers: headersList
       }
     )
 
@@ -86,7 +86,7 @@ const EditProfile = () => {
   const uploadProfileImgReq = async () => {
     let accessToken = await getAccessToken()
     let headersList = {
-      authorization: 'Bearer ' + accessToken,
+      authorization: 'Bearer ' + accessToken
     }
     let formData = new FormData()
 
@@ -96,11 +96,11 @@ const EditProfile = () => {
     )
 
     let response = await fetch(
-      `http://${process.env.host}:${process.env.port}/upload/profile`,
+      `https://${process.env.host}:${process.env.port}/upload/profile`,
       {
         method: 'POST',
         headers: headersList,
-        body: formData,
+        body: formData
       }
     )
 
@@ -116,7 +116,7 @@ const EditProfile = () => {
         icon: 'success',
         title: t('updateimagemessage'),
         showConfirmButton: false,
-        timer: 1500,
+        timer: 1500
       })
     }
   }
@@ -126,7 +126,7 @@ const EditProfile = () => {
     let headersList = {
       authorization: 'Bearer ' + accessToken,
       'Content-Type': 'application/json',
-      'Cross-Origin-Resource-Policy': 'cross-origin',
+      'Cross-Origin-Resource-Policy': 'cross-origin'
     }
     let firstName = document.getElementById('firstName').value
     let lastName = document.getElementById('lastName').value
@@ -137,12 +137,12 @@ const EditProfile = () => {
     let address = [
       {
         id: document.getElementById('address_1_id').getAttribute('data-id'),
-        address: document.getElementById('address_1').value,
+        address: document.getElementById('address_1').value
       },
       {
         id: document.getElementById('address_2_id').getAttribute('data-id'),
-        address: document.getElementById('address_2').value,
-      },
+        address: document.getElementById('address_2').value
+      }
     ]
     let DisabilityCategory = []
     var ele = document.getElementsByTagName('input')
@@ -150,7 +150,7 @@ const EditProfile = () => {
       if (ele[i].type == 'checkbox' && ele[i].checked == true) {
         DisabilityCategory.push({
           code: ele[i].value,
-          type: ele[i].value,
+          type: ele[i].value
         })
       }
     }
@@ -163,18 +163,18 @@ const EditProfile = () => {
         age: parseInt(age),
         dob: new Date(dob),
         Addresses: address,
-        DisabilityCategories: DisabilityCategory,
-      },
+        DisabilityCategories: DisabilityCategory
+      }
     })
 
     console.log(bodyContent)
 
     let response = await fetch(
-      `http://${process.env.host}:${process.env.port}/profile`,
+      `https://${process.env.host}:${process.env.port}/profile`,
       {
         method: 'PATCH',
         headers: headersList,
-        body: bodyContent,
+        body: bodyContent
       }
     )
 
@@ -191,7 +191,7 @@ const EditProfile = () => {
         icon: 'success',
         title: t('updateprofilemessage'),
         showConfirmButton: false,
-        timer: 1500,
+        timer: 1500
       })
     }
   }
@@ -201,19 +201,19 @@ const EditProfile = () => {
     let headersList = {
       authorization: 'Bearer ' + accessToken,
       'Content-Type': 'application/json',
-      'Cross-Origin-Resource-Policy': 'cross-origin',
+      'Cross-Origin-Resource-Policy': 'cross-origin'
     }
     let bodyContent = JSON.stringify({
       username: document.getElementById('username').value,
-      phone: document.getElementById('phone').value,
+      phone: document.getElementById('phone').value
     })
 
     let response = await fetch(
-      `http://${process.env.host}:${process.env.port}/auth`,
+      `https://${process.env.host}:${process.env.port}/auth`,
       {
         method: 'PATCH',
         headers: headersList,
-        body: bodyContent,
+        body: bodyContent
       }
     )
 
@@ -227,7 +227,7 @@ const EditProfile = () => {
       let error = t('phoneerror') + ': (+33143156455)'
       document.getElementById('phoneError').innerHTML = error
       return {
-        error: error,
+        error: error
       }
     } else document.getElementById('phoneError').innerHTML = ''
     const res = await editAuth()
@@ -238,7 +238,7 @@ const EditProfile = () => {
         icon: 'success',
         title: t('updateprofilemessage'),
         showConfirmButton: false,
-        timer: 1500,
+        timer: 1500
       })
     }
   }
@@ -261,31 +261,31 @@ const EditProfile = () => {
         icon: 'error',
         title: error,
         showConfirmButton: false,
-        timer: 1500,
+        timer: 1500
       })
 
       return {
-        error: error,
+        error: error
       }
     }
     let refreshToken = localStorage.getItem('refreshToken')
     let headersList = {
       authorization: 'Bearer ' + refreshToken,
       'Content-Type': 'application/json',
-      'Cross-Origin-Resource-Policy': 'cross-origin',
+      'Cross-Origin-Resource-Policy': 'cross-origin'
     }
     var email = localStorage.getItem('email')
     let bodyContent = JSON.stringify({
       token: refreshToken,
       password: password,
-      email: email,
+      email: email
     })
     let response = await fetch(
-      `http://${process.env.host}:${process.env.port}/reset/password`,
+      `https://${process.env.host}:${process.env.port}/reset/password`,
       {
         method: 'PATCH',
         headers: headersList,
-        body: bodyContent,
+        body: bodyContent
       }
     )
 
@@ -301,7 +301,7 @@ const EditProfile = () => {
         icon: 'success',
         title: t('resetmessage'),
         showConfirmButton: false,
-        timer: 1500,
+        timer: 1500
       })
     }
   }
@@ -310,13 +310,13 @@ const EditProfile = () => {
     async function fetchDisabilities() {
       let accessToken = await getAccessToken()
       let headersList = {
-        authorization: 'Bearer ' + accessToken,
+        authorization: 'Bearer ' + accessToken
       }
       console.log(headersList)
       const response = await fetch(
         `http://localhost:3000/disability/all?locale=${locale}`,
         {
-          headers: headersList,
+          headers: headersList
         }
       )
       let res = await response.json()
@@ -370,7 +370,7 @@ const EditProfile = () => {
           disPreState.push({
             id: fetchedDisabilities[i].id,
             type: fetchedDisabilities[i].type,
-            isChecked: isChecked,
+            isChecked: isChecked
           })
         }
         setDisabilities(disPreState)
